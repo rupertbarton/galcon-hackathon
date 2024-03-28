@@ -1,8 +1,5 @@
 from game.player import Player
-from game.galaxy import Galaxy
-from game.planet import Planet
-from polar_coordinates import PolarCoordinates
-from utils import convert_polar_to_cartesian
+from map_generation.polar_coordinates import PolarCoordinates
 
 from typing import List
 

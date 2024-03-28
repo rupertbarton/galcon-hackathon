@@ -1,6 +1,6 @@
-from coordinates import Coordinates
-from planet import Planet
-from player import Player
+from game.coordinates import Coordinates
+from game.planet import Planet
+from game.player import Player
 
 class Fleet:
     fleet_counter = 0

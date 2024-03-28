@@ -1,9 +1,9 @@
-from galaxy import Galaxy
-from player import Player
-from planet import Planet
-from fleet import Fleet
-from order import Order
-from utils import get_next_fleet_coords, get_distance
+from game.galaxy import Galaxy
+from game.player import Player
+from game.planet import Planet
+from game.fleet import Fleet
+from game.order import Order
+from game.utils import get_next_fleet_coords, get_distance
 
 from typing import List
 import copy

@@ -1,5 +1,5 @@
-from coordinates import Coordinates
-from fleet import Fleet
+from game.coordinates import Coordinates
+# from game.fleet import Fleet
 
 from typing import List
 import math
@@ -28,12 +28,12 @@ def get_distance_and_dx_dy(start: Coordinates, end: Coordinates):
 def get_distance(start: Coordinates, end: Coordinates):
     return get_distance_and_dx_dy(start, end)[0]
 
-def get_time_for_fleet_to_arrive(fleet: Fleet):
-    distance = get_distance(fleet.position, fleet.destination):
+def get_time_for_fleet_to_arrive(fleet):
+    distance = get_distance(fleet.position, fleet.destination)
     time = distance / fleet.speed
     return time
 
-def is_fleet_reinforcing(fleet: Fleet):
+def is_fleet_reinforcing(fleet):
     if fleet.owner is fleet.destination.owner:
         return True
     elif fleet.owner.team is None or fleet.destination.owner is None:

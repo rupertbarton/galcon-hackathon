@@ -1,5 +1,5 @@
-from planet import Planet
-from player import Player
+from game.planet import Planet
+from game.player import Player
 
 class Order:
     order_count = 0
