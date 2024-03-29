@@ -8,6 +8,9 @@ from game.utils import get_next_fleet_coords, get_distance
 from typing import List
 import copy
 
+import logging
+logger = logging.getLogger(__name__)
+
 class Game:
     game_counter = 0
 
@@ -44,7 +47,7 @@ class Game:
                 try:
                     current_p_orders.append(Order(**p_order, player=player))
                 except:
-                    print(f"Incorrect order passed: {p_order}")
+                    logger.warn(f"Incorrect order passed: {p_order}")
             all_orders += current_p_orders
 
         return all_orders
@@ -58,9 +61,24 @@ class Game:
 
     def _create_fleets(self, orders: List[Order]):
         for order in orders:
-            starting_coordinates = get_next_fleet_coords(order.source.position, order.destination.position, order.source.radius)
-            new_fleet = Fleet(position=starting_coordinates, destination=order.destination, troop_count=order.troop_count, owner=order.player)
-            self.current_state.fleets.append(new_fleet)
+            if self._is_order_valid(order):
+                starting_coordinates = get_next_fleet_coords(order.source.position, order.destination.position, order.source.radius)
+                new_fleet = Fleet(position=starting_coordinates, destination=order.destination, troop_count=order.troop_count, owner=order.player)
+                order.source.troop_count -= order.troop_count
+                self.current_state.fleets.append(new_fleet)
+
+    def _is_order_valid(self, order: Order):
+        if order.source.owner == None:
+            logger.error(f"Player {order.player} just tried to create an order from a planet they do not own")
+            return False
+        if not order.player.id == order.source.owner.id:
+            logger.error(f"Player {order.player} just tried to create an order from a planet they do not own")
+            return False
+        if order.troop_count > order.source.troop_count:
+            logger.error(f"Player {order.player} just tried to create an order with more troops than are available")
+            return False
+        return True
+
 
     def _move_fleets(self):
         for fleet in self.current_state.fleets:

@@ -1,12 +1,14 @@
 from game.coordinates import Coordinates
-# from game.fleet import Fleet
 
-from typing import List
 import math
 
 def get_next_fleet_coords(start: Coordinates, end: Coordinates, speed: int) -> Coordinates:
 
     total_distance, dx, dy = get_distance_and_dx_dy(start, end)
+
+    if total_distance == 0:
+        return end
+
     fraction_travelled = speed/total_distance
 
     if fraction_travelled >= 1:
@@ -29,12 +31,14 @@ def get_distance(start: Coordinates, end: Coordinates):
     return get_distance_and_dx_dy(start, end)[0]
 
 def get_time_for_fleet_to_arrive(fleet):
-    distance = get_distance(fleet.position, fleet.destination)
+    distance = get_distance(fleet.position, fleet.destination.position)
     time = distance / fleet.speed
     return time
 
 def is_fleet_reinforcing(fleet):
-    if fleet.owner.id == fleet.destination.owner.id:
+    if fleet.destination.owner == None:
+        return False
+    elif fleet.owner.id == fleet.destination.owner.id:
         return True
     elif fleet.owner.team == None or fleet.destination.owner == None:
         return False

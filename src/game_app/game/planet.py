@@ -32,7 +32,7 @@ class Planet:
             if is_fleet_reinforcing(fleet):
                 self.troop_count += fleet.troop_count
             else:
-                self.troop_count - fleet.troop_count
+                self.troop_count -= fleet.troop_count
             
             if self.troop_count < 0:
                 self.owner = fleet.owner
