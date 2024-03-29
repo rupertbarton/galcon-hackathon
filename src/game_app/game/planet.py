@@ -23,7 +23,8 @@ class Planet:
         Planet.planet_counter += 1
     
     def run(self):
-        self.troop_count += self.troop_production_rate
+        if not self.owner == None:
+            self.troop_count += self.troop_production_rate
 
     def calculate_combat(self):
         self.arriving_fleets.sort(key=get_time_for_fleet_to_arrive)

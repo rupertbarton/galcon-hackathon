@@ -34,9 +34,9 @@ def get_time_for_fleet_to_arrive(fleet):
     return time
 
 def is_fleet_reinforcing(fleet):
-    if fleet.owner is fleet.destination.owner:
+    if fleet.owner.id == fleet.destination.owner.id:
         return True
-    elif fleet.owner.team is None or fleet.destination.owner is None:
+    elif fleet.owner.team == None or fleet.destination.owner == None:
         return False
-    elif fleet.owner.team is fleet.destination.owner.team:
+    elif fleet.owner.team.id == fleet.destination.owner.team.id:
         return True

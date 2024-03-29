@@ -29,7 +29,6 @@ class Game:
             self.history=[Galaxy(planets=starting_map, fleets=[])]
         else:
             self.history=history
-        print(self.history)
         self.current_state = copy.deepcopy(self.history[-1])
         self.winner = None
         self.max_turn_limit=max_turn_limit
@@ -38,11 +37,10 @@ class Game:
 
     def _get_player_orders(self) -> List[Order]:
         all_orders = []
-
         for player in self.players:
-            current_p_orders = []
 
-            for p_order in player.get_next_orders():
+            current_p_orders = []
+            for p_order in player.get_next_orders(player, self.current_state):
                 try:
                     current_p_orders.append(Order(**p_order, player=player))
                 except:
@@ -68,9 +66,9 @@ class Game:
         for fleet in self.current_state.fleets:
             if get_distance(fleet.position, fleet.destination.position) < fleet.speed:
                 fleet.destination.arriving_fleets.append(fleet)
-                self.current_state.fleets.remove()
+                self.current_state.fleets.remove(fleet)
             else:
-                fleet.position = get_next_fleet_coords(fleet.position, fleet.destination, fleet.speed)
+                fleet.position = get_next_fleet_coords(fleet.position, fleet.destination.position, fleet.speed)
 
     def _calculate_combat(self):
         for planet in self.current_state.planets:
@@ -85,10 +83,3 @@ class Game:
             self._calculate_combat()
             self._iterate_planets()
             self._save_state()
-
-            print(self.history[-1].planets[0].troop_count)
-
-
-game = Game(players="hello", starting_map=[Planet([4,5], 4,4,0)])
-
-game.run()
