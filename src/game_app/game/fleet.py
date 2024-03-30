@@ -10,7 +10,7 @@ class Fleet:
         position: Coordinates,
         destination: Planet,
         troop_count,
-        speed=0.7,
+        speed=0.3,
         owner: Player=None,
     ):
         self.position=position

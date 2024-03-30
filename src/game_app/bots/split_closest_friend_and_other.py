@@ -17,10 +17,10 @@ class SplitClosestFriendAndOther(AbstractBot):
         orders = []
 
         for planet in self.own_planets:
-            if self.friendly_planets:
+            if len(self.friendly_planets) > 1:
                 new_friend_order = {
                     "source": planet,
-                    "destination": find_nearest_planet(planet.position, self.friendly_planets),
+                    "destination": find_nearest_planet(planet.position, [p for p in  self.friendly_planets if not p.id == planet.id]),
                     "troop_count": planet.troop_count/2
                 }
                 orders.append(new_friend_order)

@@ -27,9 +27,6 @@ def draw_galaxy(galaxy: Galaxy, ax: Axes=plt.subplots(figsize=(5, 2.7), layout="
         circ = plt.Circle(
             (planet.position.x, planet.position.y), planet.radius, color=planet.owner.colour if planet.owner else "grey")
         ax.add_patch(circ)
-        ax.text(planet.position.x, planet.position.y, planet.troop_count,
-                horizontalalignment='center', verticalalignment='center')
-
 
     # ax.scatter("x", "y", s="s", c="c", data=planet_data)
     # ax.scatter("x", "y", c="c", marker=(1, 1, calculate_direction_angle()), data=fleet_data)
