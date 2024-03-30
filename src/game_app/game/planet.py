@@ -37,3 +37,4 @@ class Planet:
             if self.troop_count < 0:
                 self.owner = fleet.owner
                 self.troop_count = abs(self.troop_count)
+            self.arriving_fleets.remove(fleet)

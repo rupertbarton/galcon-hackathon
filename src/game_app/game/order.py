@@ -12,7 +12,7 @@ class Order:
     ):
         self.source=source
         self.destination=destination
-        self.troop_count=troop_count
+        self.troop_count=round(troop_count)
         self.player=player
         self.id = f"Order{Order.order_count}"
         Order.order_count += 1

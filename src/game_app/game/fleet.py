@@ -10,7 +10,7 @@ class Fleet:
         position: Coordinates,
         destination: Planet,
         troop_count,
-        speed=0.1,
+        speed=0.7,
         owner: Player=None,
     ):
         self.position=position
@@ -18,5 +18,5 @@ class Fleet:
         self.troop_count=troop_count
         self.speed=speed
         self.owner=owner
-        self.id = f"P{Fleet.fleet_counter}"
+        self.id = f"F{Fleet.fleet_counter}"
         Fleet.fleet_counter += 1

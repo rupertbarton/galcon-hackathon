@@ -23,8 +23,8 @@ class AbstractMapGenerator:
     def get_rotationally_reflect_coords_list(self, initial_coords: PolarCoordinates):
         final_list_of_coords = [initial_coords]
         d_theta = 360/len(self.players)
-        for _ in self.players:
-            new_coord = PolarCoordinates(initial_coords.r, initial_coords.theta + d_theta)
+        for i in range(len(self.players) - 1):
+            new_coord = PolarCoordinates(initial_coords.r, initial_coords.theta + d_theta * (i+1))
             final_list_of_coords.append(new_coord)
         return (final_list_of_coords)
     

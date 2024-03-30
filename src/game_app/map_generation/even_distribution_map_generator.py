@@ -13,9 +13,10 @@ class EvenDistributionMapGenerator(AbstractMapGenerator):
         planet_list = []
         p1_homeworld_coords = PolarCoordinates(self.max_radius, 0)
         all_homeworld_coords = self.get_rotationally_reflect_coords_list(p1_homeworld_coords)
+        from pprint import pprint
 
         for i, player in enumerate(self.players):
-            new_homeworld_planet = Planet(convert_polar_to_cartesian(all_homeworld_coords[i]), self.size_of_home_planet, self.size_of_home_planet, self.starting_troop_count, player)
+            new_homeworld_planet = Planet(convert_polar_to_cartesian(all_homeworld_coords[i]), self.size_of_home_planet/10, self.size_of_home_planet, self.starting_troop_count, player)
             planet_list.append(new_homeworld_planet)
 
         for _ in range(self.number_of_planets_per_player):
@@ -24,7 +25,7 @@ class EvenDistributionMapGenerator(AbstractMapGenerator):
             new_planet_troop_count = random.randint(1, int(self.starting_troop_count/2))
             all_new_planet_coords = self.get_rotationally_reflect_coords_list(p1_new_planet_coords)
             for i, player in enumerate(self.players):
-                new_homeworld_planet = Planet(convert_polar_to_cartesian(all_new_planet_coords[i]), new_planet_size, new_planet_size, new_planet_troop_count)
+                new_homeworld_planet = Planet(convert_polar_to_cartesian(all_new_planet_coords[i]), new_planet_size/10, new_planet_size, new_planet_troop_count)
                 planet_list.append(new_homeworld_planet)
 
         return Galaxy(planet_list, [])
