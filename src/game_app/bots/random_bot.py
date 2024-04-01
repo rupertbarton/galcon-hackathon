@@ -16,7 +16,7 @@ class RandomBot(AbstractBot):
                 new_order = {
                     "source": planet,
                     "destination": random.choice(self.current_state.planets),
-                    "troop_count": planet.troop_count * random.random()
+                    "troop_count": planet.troop_count * random.random(),
                 }
                 orders.append(new_order)
         return orders

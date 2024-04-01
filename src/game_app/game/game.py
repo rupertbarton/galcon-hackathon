@@ -12,9 +12,13 @@ import sys
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(stream=sys.stdout)
-formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s', datefmt='%a, %d %b %Y %H:%M:%S')
+formatter = logging.Formatter(
+    "[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s",
+    datefmt="%a, %d %b %Y %H:%M:%S",
+)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
 
 class Game:
     game_counter = 0
@@ -22,24 +26,28 @@ class Game:
     def __init__(
         self,
         players: list[Player],
-        starting_map: List[Planet]=None,
-        history: List[Galaxy]=None,
-        max_turn_limit: int=500
+        starting_map: List[Planet] = None,
+        history: List[Galaxy] = None,
+        max_turn_limit: int = 500,
     ):
         if not starting_map and not history:
-            raise ValueError("Either a starting_map or history arg must be passed to a Game")
+            raise ValueError(
+                "Either a starting_map or history arg must be passed to a Game"
+            )
         elif starting_map and history:
-            raise ValueError("Can't specify both a starting_map or history arg for a Game")
+            raise ValueError(
+                "Can't specify both a starting_map or history arg for a Game"
+            )
 
-        self.players=players
+        self.players = players
 
         if starting_map:
-            self.history=[Galaxy(planets=starting_map, fleets=[])]
+            self.history = [Galaxy(planets=starting_map, fleets=[])]
         else:
-            self.history=history
+            self.history = history
         self.current_state = copy.deepcopy(self.history[-1])
         self.winner = None
-        self.max_turn_limit=max_turn_limit
+        self.max_turn_limit = max_turn_limit
         self.id = f"G{Game.game_counter}"
         Game.game_counter += 1
 
@@ -56,7 +64,7 @@ class Game:
             all_orders += current_p_orders
 
         return all_orders
-    
+
     def _iterate_planets(self):
         for planet in self.current_state.planets:
             planet.run()
@@ -67,34 +75,52 @@ class Game:
     def _create_fleets(self, orders: List[Order]):
         for order in orders:
             if self._is_order_valid(order):
-                starting_coordinates = get_next_fleet_coords(order.source.position, order.destination.position, order.source.radius)
+                starting_coordinates = get_next_fleet_coords(
+                    order.source.position,
+                    order.destination.position,
+                    order.source.radius,
+                )
                 troop_count = min(order.troop_count, order.source.troop_count)
                 if troop_count > 0:
-                    new_fleet = Fleet(position=starting_coordinates, destination=order.destination, troop_count=troop_count, owner=order.player)
+                    new_fleet = Fleet(
+                        position=starting_coordinates,
+                        destination=order.destination,
+                        troop_count=troop_count,
+                        owner=order.player,
+                    )
                     order.source.troop_count -= troop_count
                     self.current_state.fleets.append(new_fleet)
 
-
     def _is_order_valid(self, order: Order):
         if order.source.owner == None:
-            logger.error(f"Player {order.player.name} just tried to create an order from a planet they do not own")
+            logger.error(
+                f"Player {order.player.name} just tried to create an order from a planet they do not own"
+            )
             return False
         if not order.player.id == order.source.owner.id:
-            logger.error(f"Player {order.player.name} just tried to create an order from a planet they do not own")
+            logger.error(
+                f"Player {order.player.name} just tried to create an order from a planet they do not own"
+            )
             return False
         if order.troop_count > order.source.troop_count:
-            logger.warn(f"Player {order.player.name} just tried to create an order with more troops than are available")
+            logger.warn(
+                f"Player {order.player.name} just tried to create an order with more troops than are available"
+            )
             return True
         return True
 
-
     def _move_fleets(self):
         for fleet in self.current_state.fleets:
-            if get_distance(fleet.position, fleet.destination.position) < fleet.speed + fleet.destination.radius:
+            if (
+                get_distance(fleet.position, fleet.destination.position)
+                < fleet.speed + fleet.destination.radius
+            ):
                 fleet.destination.arriving_fleets.append(fleet)
                 self.current_state.fleets.remove(fleet)
             else:
-                fleet.position = get_next_fleet_coords(fleet.position, fleet.destination.position, fleet.speed)
+                fleet.position = get_next_fleet_coords(
+                    fleet.position, fleet.destination.position, fleet.speed
+                )
 
     def _calculate_combat(self):
         for planet in self.current_state.planets:
@@ -112,17 +138,16 @@ class Game:
 
     def _calculate_winner(self):
         if not self.winner:
-            troops_counts = {player.id: {
-                "player": player,
-                "count": 0
-            } for player in self.players}
+            troops_counts = {
+                player.id: {"player": player, "count": 0} for player in self.players
+            }
             for troops in self.current_state.planets + self.current_state.fleets:
                 if troops.owner:
                     troops_counts[troops.owner.id]["count"] += troops.troop_count
             print(troops_counts.values())
-            self.winner = max(troops_counts.values(), key=lambda p: p["count"])["player"]
-
-
+            self.winner = max(troops_counts.values(), key=lambda p: p["count"])[
+                "player"
+            ]
 
     def run(self):
         while not self.winner and len(self.history) < self.max_turn_limit:
@@ -133,4 +158,4 @@ class Game:
             self._iterate_planets()
             self._check_for_winner()
             self._save_state()
-        self._calculate_winner()      
+        self._calculate_winner()

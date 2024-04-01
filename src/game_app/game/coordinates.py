@@ -4,7 +4,5 @@ class Coordinates:
         x: float,
         y: float,
     ):
-        self.x=x
-        self.y=y
-
-    
+        self.x = x
+        self.y = y

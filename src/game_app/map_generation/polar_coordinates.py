@@ -4,7 +4,5 @@ class PolarCoordinates:
         r: float,
         theta: float,
     ):
-        self.r=r
-        self.theta=theta
-
-    
+        self.r = r
+        self.theta = theta

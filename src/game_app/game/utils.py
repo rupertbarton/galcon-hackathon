@@ -2,22 +2,26 @@ from game.coordinates import Coordinates
 
 import math
 
-def get_next_fleet_coords(start: Coordinates, end: Coordinates, speed: int) -> Coordinates:
+
+def get_next_fleet_coords(
+    start: Coordinates, end: Coordinates, speed: int
+) -> Coordinates:
 
     total_distance, dx, dy = get_distance_and_dx_dy(start, end)
 
     if total_distance == 0:
         return end
 
-    fraction_travelled = speed/total_distance
+    fraction_travelled = speed / total_distance
 
     if fraction_travelled >= 1:
         return end
 
-    final_x = start.x + (dx*fraction_travelled)
-    final_y = start.y + (dy*fraction_travelled)
+    final_x = start.x + (dx * fraction_travelled)
+    final_y = start.y + (dy * fraction_travelled)
 
     return Coordinates(final_x, final_y)
+
 
 def get_distance_and_dx_dy(start: Coordinates, end: Coordinates):
     dx = end.x - start.x
@@ -27,13 +31,16 @@ def get_distance_and_dx_dy(start: Coordinates, end: Coordinates):
 
     return (total_distance, dx, dy)
 
+
 def get_distance(start: Coordinates, end: Coordinates):
     return get_distance_and_dx_dy(start, end)[0]
+
 
 def get_time_for_fleet_to_arrive(fleet):
     distance = get_distance(fleet.position, fleet.destination.position)
     time = distance / fleet.speed
     return time
+
 
 def is_fleet_reinforcing(fleet):
     if fleet.destination.owner == None:
