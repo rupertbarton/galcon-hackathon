@@ -7,12 +7,6 @@ from typing import List
 
 
 def draw_galaxy(galaxy: Galaxy, ax: Axes=plt.subplots(figsize=(5, 2.7), layout="constrained")):
-    planet_data = {
-        "x": [planet.position.x for planet in galaxy.planets],
-        "y": [planet.position.y for planet in galaxy.planets],
-        "s": [20*2**planet.radius for planet in galaxy.planets],
-        "c": [planet.owner.colour if planet.owner else "grey" for planet in galaxy.planets]
-    }
 
     fleet_data = {
         "x": [fleet.position.x for fleet in galaxy.fleets],
@@ -28,8 +22,6 @@ def draw_galaxy(galaxy: Galaxy, ax: Axes=plt.subplots(figsize=(5, 2.7), layout="
             (planet.position.x, planet.position.y), planet.radius, color=planet.owner.colour if planet.owner else "grey")
         ax.add_patch(circ)
 
-    # ax.scatter("x", "y", s="s", c="c", data=planet_data)
-    # ax.scatter("x", "y", c="c", marker=(1, 1, calculate_direction_angle()), data=fleet_data)
     ax.scatter("x", "y", c="c", data=fleet_data)
 
     total_troops = {}
@@ -52,6 +44,8 @@ def draw_galaxy(galaxy: Galaxy, ax: Axes=plt.subplots(figsize=(5, 2.7), layout="
 
 def draw_game(history: List[Galaxy], time_per_frame=0.1):
     ax = plt.axes()
+    ax.set_xlim(30)
+    ax.set_ylim(30)
 
     for galaxy in history:
         draw_galaxy(galaxy, ax)

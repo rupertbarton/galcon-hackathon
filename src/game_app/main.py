@@ -1,7 +1,9 @@
 from map_generation.even_distribution_map_generator import EvenDistributionMapGenerator
+from map_generation.spoke_map_generator import SpokeMapGenerator
 from bots.random_bot import RandomBot
 from bots.full_aggression_bot import FullAggressionBot
 from bots.split_closest_friend_and_other import SplitClosestFriendAndOther
+from bots.optimal_expansion import OptimalExpansion
 from game.player import Player
 from game.game import Game
 from game_draw.draw_game import draw_game
@@ -9,16 +11,23 @@ from game_draw.draw_game import draw_game
 bot_1 = SplitClosestFriendAndOther()
 bot_2 = RandomBot()
 bot_3 = FullAggressionBot()
+bot_4 = OptimalExpansion()
 
 player_1 = Player("Split", "red", bot_1.create_orders)
 player_2 = Player("Random", "blue", bot_2.create_orders)
 player_3 = Player("Aggressive", "green", bot_3.create_orders)
+player_4 = Player("OptimalExpansion", "yellow", bot_4.create_orders)
 
-player_list = [player_1, player_2, player_3]
+player_list = [
+    player_3,
+    player_2,
+    player_1,
+    player_4
+ ]
 
-map = EvenDistributionMapGenerator(10, 5, player_list).create_map()
+map = SpokeMapGenerator(30, 25, player_list).create_map()
 
-game = Game(player_list, map.planets, max_turn_limit=2000)
+game = Game(player_list, map.planets, max_turn_limit=100)
 game.run()
 
 print(f"THE WINNER IS: {game.winner.name}")

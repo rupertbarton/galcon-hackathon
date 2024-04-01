@@ -4,13 +4,14 @@ from game.player import Player
 
 class Fleet:
     fleet_counter = 0
+    default_fleet_speed = 0.3
 
     def __init__(
         self,
         position: Coordinates,
         destination: Planet,
         troop_count,
-        speed=0.3,
+        speed=default_fleet_speed,
         owner: Player=None,
     ):
         self.position=position
