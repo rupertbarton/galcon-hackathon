@@ -9,4 +9,7 @@ class Team:
         self.colour = colour
         self.name = name
         self.id = f"Team{Team.team_counter}"
-        Team.player_counter += 1
+        Team.team_counter += 1
+
+    def to_json(self):
+        return {"name": self.name, "colour": self.colour}

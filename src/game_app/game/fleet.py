@@ -11,7 +11,7 @@ class Fleet:
         self,
         position: Coordinates,
         destination: Planet,
-        troop_count,
+        troop_count: int,
         speed=default_fleet_speed,
         owner: Player = None,
     ):
@@ -22,3 +22,13 @@ class Fleet:
         self.owner = owner
         self.id = f"F{Fleet.fleet_counter}"
         Fleet.fleet_counter += 1
+
+    def to_json(self):
+        return {
+            "position": self.position.to_json(),
+            # "destination": self.destination.to_json(),
+            "troop_count": self.troop_count,
+            # "speed": self.speed,
+            "owner": self.owner.to_json(),
+            # "id": self.id
+        }

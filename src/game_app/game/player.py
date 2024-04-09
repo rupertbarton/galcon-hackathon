@@ -18,3 +18,10 @@ class Player:
 
         self.id = f"Player{Player.player_counter}"
         Player.player_counter += 1
+
+    def to_json(self):
+        return {
+            # "name": self.name,
+            "colour": self.colour,
+            # "team": self.team.to_json() if self.team else None
+        }

@@ -39,3 +39,13 @@ class Planet:
                 self.owner = fleet.owner
                 self.troop_count = abs(self.troop_count)
             self.arriving_fleets.remove(fleet)
+
+    def to_json(self):
+        return {
+            "position": self.position.to_json(),
+            "radius": self.radius,
+            # "troop_count": self.troop_count,
+            # "troop_production_rate": self.troop_production_rate,
+            "owner": self.owner.to_json() if self.owner else None,
+            # "id": self.id
+        }

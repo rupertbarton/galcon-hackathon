@@ -59,8 +59,6 @@ def draw_galaxy(
 
 def draw_game(history: List[Galaxy], time_per_frame=0.1):
     ax = plt.axes()
-    ax.set_xlim(30)
-    ax.set_ylim(30)
 
     for galaxy in history:
         draw_galaxy(galaxy, ax)

@@ -6,3 +6,6 @@ class Coordinates:
     ):
         self.x = x
         self.y = y
+
+    def to_json(self):
+        return {"x": self.x, "y": self.y}

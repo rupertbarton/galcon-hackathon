@@ -7,6 +7,7 @@ from bots.optimal_expansion import OptimalExpansion
 from game.player import Player
 from game.game import Game
 from game_draw.draw_game import draw_game
+import json
 
 bot_1 = SplitClosestFriendAndOther()
 bot_2 = RandomBot()
@@ -20,9 +21,9 @@ player_4 = Player("OptimalExpansion", "yellow", bot_4.create_orders)
 
 player_list = [player_3, player_2, player_1, player_4]
 
-map = SpokeMapGenerator(30, 25, player_list).create_map()
+starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
 
-game = Game(player_list, map.planets, max_turn_limit=100)
+game = Game(player_list, starting_map.planets, max_turn_limit=1000)
 game.run()
 
 print(f"THE WINNER IS: {game.winner.name}")
@@ -31,6 +32,11 @@ print(f"THE WINNER IS: {game.winner.name}")
 # for planet in game.current_state.planets:
 #     pprint(vars(planet))
 
-draw_game(game.history)
+# draw_game(game.history)
+
+json_object = json.dumps(game.to_json())
+
+with open("sample.json", "w") as outfile:
+    outfile.write(json_object)
 
 print("end")

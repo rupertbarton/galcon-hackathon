@@ -159,3 +159,6 @@ class Game:
             self._check_for_winner()
             self._save_state()
         self._calculate_winner()
+
+    def to_json(self):
+        return [galaxy.to_json() for galaxy in self.history]

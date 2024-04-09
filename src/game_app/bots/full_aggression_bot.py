@@ -16,7 +16,7 @@ class FullAggressionBot(AbstractBot):
 
         orders = []
 
-        if self.current_target == None or (
+        if self.current_target is None or (
             self.current_target and self.is_friendly_planet(self.current_target)
         ):
             self.current_target = find_nearest_planet(

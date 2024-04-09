@@ -12,3 +12,9 @@ class Galaxy:
     ):
         self.planets = planets
         self.fleets = fleets
+
+    def to_json(self):
+        return {
+            "planets": [planet.to_json() for planet in self.planets],
+            "fleets": [fleet.to_json() for fleet in self.fleets],
+        }

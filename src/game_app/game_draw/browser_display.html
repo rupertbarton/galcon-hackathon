@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        window.onload = async function () {
+
+            var response = await fetch("http://127.0.0.1:5500/src/game_app/sample.json", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+                .then((data) => {
+                    return data.json();
+                });
+
+            var index = 0
+
+            console.log(response);
+            console.log(response[0].planets)
+
+            var data_points = [...response[index].planets.map(planet => planet.position),
+            ...response[index].fleets.map(planet => planet.position)]
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                zoomEnabled: true,
+                zoomType: "xy",
+                title: {
+                    fontColor: "white"
+                },
+                axisX: {
+                    gridThickness: 0,
+                    lineThickness: 0,
+                    tickThickness: 0,
+                },
+                axisY: {
+                    gridThickness: 0,
+                    lineThickness: 0,
+                    tickThickness: 0,
+                },
+                backgroundColor: "black",
+                data: [{
+                    type: "scatter",
+                    dataPoints: data_points
+                }]
+            });
+
+            chart.render();
+
+            var updateChart = () => {
+                fleet_data = response[index].fleets.map(fleet => (
+                    { ...fleet.position, color: fleet?.owner?.colour || "grey", markerSize: fleet.troop_count / 5, lable: "hello", markerType: "triangle" }
+                ))
+
+                planet_data = response[index].planets.map(planet => (
+                    { ...planet.position, color: planet.owner?.colour || "grey", markerSize: planet.radius * 100 }
+                ))
+
+                data_points = [...planet_data, ...fleet_data]
+                index += 1;
+                chart.data[0].set("dataPoints", data_points)
+                chart.options.title.text = "Update" + index
+            }
+
+            setInterval(function () { updateChart() }, 50)
+
+            progress.addEventListener("click", (e) => {
+                const pos =
+                    (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
+                    progress.offsetWidth;
+                index = Math.round(pos * response.length);
+            });
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="chartContainer" style="height: 100vh; width: 100%;"></div>
+    <div class="progress">
+        <progress id="progress" value="0" min="0">
+            <span id="progress-bar"></span>
+        </progress>
+    </div>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+</body>
+
+<style>
+    progress {
+        /* display: block; */
+        width: 100%;
+        height: 30px;
+        margin-top: 0.125rem;
+        border: none;
+        color: #0095dd;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    progress::-moz-progress-bar {
+        background-color: #0095dd;
+    }
+
+    progress::-webkit-progress-value {
+        background-color: #0095dd;
+    }
+</style>
+
+</html>
