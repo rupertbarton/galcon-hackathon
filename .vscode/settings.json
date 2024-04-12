@@ -1,5 +1,6 @@
 {
-    "python.analysis.extraPaths": [
-        "${workspaceFolder}/src/game_app"
-    ]
+  "python.analysis.extraPaths": ["${workspaceFolder}/src/game_app"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["src/game_app"]
 }

@@ -9,9 +9,9 @@ class Planet:
     def __init__(
         self,
         position: Coordinates,
-        radius,
-        troop_production_rate,
-        troop_count,
+        radius: int | float,
+        troop_production_rate: int | float,
+        troop_count: int | float,
         owner: Player = None,
     ):
         self.position = position
@@ -29,7 +29,9 @@ class Planet:
 
     def calculate_combat(self):
         self.arriving_fleets.sort(key=get_time_for_fleet_to_arrive)
-        for fleet in self.arriving_fleets:
+        for fleet in self.arriving_fleets[:]:
+            print(fleet.owner.name)
+            print(self.troop_count)
             if is_fleet_reinforcing(fleet):
                 self.troop_count += fleet.troop_count
             else:
