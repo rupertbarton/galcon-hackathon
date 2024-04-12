@@ -144,7 +144,6 @@ class Game:
             for troops in self.current_state.planets + self.current_state.fleets:
                 if troops.owner:
                     troops_counts[troops.owner.id]["count"] += troops.troop_count
-            print(troops_counts.values())
             self.winner = max(troops_counts.values(), key=lambda p: p["count"])[
                 "player"
             ]

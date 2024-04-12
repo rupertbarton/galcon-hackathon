@@ -29,7 +29,7 @@ class Planet:
 
     def calculate_combat(self):
         self.arriving_fleets.sort(key=get_time_for_fleet_to_arrive)
-        for fleet in self.arriving_fleets:
+        for fleet in self.arriving_fleets[:]:
             if is_fleet_reinforcing(fleet):
                 self.troop_count += fleet.troop_count
             else:
@@ -42,10 +42,10 @@ class Planet:
 
     def to_json(self):
         return {
-            "position": self.position.to_json(),
-            "radius": self.radius,
+            "p": self.position.to_json(),
+            "r": self.radius,
             # "troop_count": self.troop_count,
             # "troop_production_rate": self.troop_production_rate,
-            "owner": self.owner.to_json() if self.owner else None,
+            "o": self.owner.to_json() if self.owner else None,
             # "id": self.id
         }

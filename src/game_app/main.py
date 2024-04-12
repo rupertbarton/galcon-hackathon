@@ -8,6 +8,7 @@ from game.player import Player
 from game.game import Game
 from game_draw.draw_game import draw_game
 import json
+import gzip
 
 bot_1 = SplitClosestFriendAndOther()
 bot_2 = RandomBot()
@@ -28,15 +29,9 @@ game.run()
 
 print(f"THE WINNER IS: {game.winner.name}")
 
-# from pprint import pprint
-# for planet in game.current_state.planets:
-#     pprint(vars(planet))
-
 # draw_game(game.history)
 
-json_object = json.dumps(game.to_json())
-
-with open("sample.json", "w") as outfile:
-    outfile.write(json_object)
+with gzip.open("sample.json.gz", "wt", encoding="ascii") as zip_file:
+    json.dump(game.to_json(), zip_file, separators=(",", ":"))
 
 print("end")
