@@ -20,7 +20,11 @@ player_2 = Player("Random", "blue", bot_2.create_orders)
 player_3 = Player("Aggressive", "green", bot_3.create_orders)
 player_4 = Player("OptimalExpansion", "yellow", bot_4.create_orders)
 
-player_list = [player_3, player_2, player_1, player_4]
+player_list = [
+    # player_3, 
+# player_2, 
+player_1, 
+player_4]
 
 starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
 
