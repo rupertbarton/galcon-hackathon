@@ -5,29 +5,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script>
-        
-        
+
+
         window.onload = async function () {
             isPlaying = true
-            
+
             var play_button = document.getElementById('play')
             var pause_button = document.getElementById('pause')
             play_pause_buttons = [play_button, pause_button]
-            
-            
+
+
             var response;
             var xhr = new XMLHttpRequest();
             xhr.open("GET", 'http://127.0.0.1:5500/src/game_app/sample.json.gz', true);
             xhr.responseType = "arraybuffer";
             xhr.onload = function () {
-                var result = pako.inflate(xhr.response, {to: 'string'});
+                var result = pako.inflate(xhr.response, { to: 'string' });
                 response = JSON.parse(result)
             };
             xhr.send()
-            
-            
+
+
             var data_points = []
-            
+
             var chart = new CanvasJS.Chart("chartContainer", {
                 zoomEnabled: true,
                 zoomType: "xy",
@@ -50,67 +50,67 @@
                     dataPoints: data_points
                 }]
             });
-            
+
             chart.render();
-            
+
             var index = 0
             var updateChart = () => {
-                if (index >= response.length) {
+                if (index > response.length - 2) {
                     isPlaying = false
                     set_play_pause_button()
                 }
                 fleet_data = response[index].fleets.map(fleet => (
                     { ...fleet.p, color: fleet?.o?.c || "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle" }
-                    ))
-                    
-                    planet_data = response[index].planets.map(planet => (
-                        { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100 }
-                        ))
-                        
-                        data_points = [...planet_data, ...fleet_data]
-                        chart.data[0].set("dataPoints", data_points)
-                        chart.options.title.text = "Turn number: " + index
-                        document.querySelector('progress').value = index/response.length
-                        if (isPlaying) {
-                            index += 1;
-                        }
-                    }
-                    
-                    setInterval(function () { updateChart() }, 50)
-                    
-                    progress.addEventListener("click", (e) => {
-                        const pos =
-                        (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
-                        progress.offsetWidth;
-                        index = Math.round(pos * response.length);
-                    });
-                    var set_play_pause_button = () => {
-                        var active_play_pause_button;
-                        if (isPlaying) {
-                            active_play_pause_button = pause_button;
-                        }
-                        else {
-                            active_play_pause_button = play_button;
-                        }
-                        play_button.style.display = 'none';
-                        pause_button.style.display = 'none';
-                        active_play_pause_button.style.display = 'block';
-                    }
-                    
-                    set_play_pause_button()
-                    
-                    play_pause_buttons.map(play_pause_button => play_pause_button.addEventListener("click", (e) => {
-                        isPlaying = !isPlaying
-                        set_play_pause_button()
-                    }));
+                ))
+
+                planet_data = response[index].planets.map(planet => (
+                    { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100 }
+                ))
+
+                data_points = [...planet_data, ...fleet_data]
+                chart.data[0].set("dataPoints", data_points)
+                chart.options.title.text = "Turn number: " + index
+                document.querySelector('progress').value = index / response.length
+                if (isPlaying) {
+                    index += 1;
                 }
-                
-                </script>
+            }
+
+            setInterval(function () { updateChart() }, 50)
+
+            progress.addEventListener("click", (e) => {
+                const pos =
+                    (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
+                    progress.offsetWidth;
+                index = Math.round(pos * response.length);
+            });
+            var set_play_pause_button = () => {
+                var active_play_pause_button;
+                if (isPlaying) {
+                    active_play_pause_button = pause_button;
+                }
+                else {
+                    active_play_pause_button = play_button;
+                }
+                play_button.style.display = 'none';
+                pause_button.style.display = 'none';
+                active_play_pause_button.style.display = 'block';
+            }
+
+            set_play_pause_button()
+
+            play_pause_buttons.map(play_pause_button => play_pause_button.addEventListener("click", (e) => {
+                isPlaying = !isPlaying
+                set_play_pause_button()
+            }));
+        }
+
+    </script>
 </head>
 
 <body>
     <div id="chartContainer"
-    style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
+        style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
     </div>
 
     <!-- https://developer.mozilla.org/en-US/docs/Web/Media/Audio_and_video_delivery/Video_player_styling_basics -->
