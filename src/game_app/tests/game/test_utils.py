@@ -46,17 +46,17 @@ import pytest
 #     return time
 
 
-def is_fleet_reinforcing(fleet):
-    if fleet.destination.owner == None:
-        return False
-    elif fleet.owner.id == fleet.destination.owner.id:
-        return True
-    elif fleet.owner.team == None or fleet.destination.owner == None:
-        return False
-    elif fleet.owner.team.id == fleet.destination.owner.team.id:
-        return True
-    else:
-        return False
+# def is_fleet_reinforcing(fleet):
+#     if fleet.destination.owner == None:
+#         return False
+#     elif fleet.owner.id == fleet.destination.owner.id:
+#         return True
+#     elif fleet.owner.team == None or fleet.destination.owner == None:
+#         return False
+#     elif fleet.owner.team.id == fleet.destination.owner.team.id:
+#         return True
+#     else:
+#         return False
 
 TEAM_ALLY = Team("ally", "red")
 TEAM_ENEMY = Team("enemy", "red")
@@ -79,6 +79,9 @@ PLAYER_ENEMY = Player("p5", "red", lambda _: [], TEAM_ENEMY)
         (PLAYER_OG_TEAM, PLAYER_ALLY, True),
         (PLAYER_OG_TEAM, PLAYER_ENEMY, False),
         (PLAYER_OG_TEAM, None, False),
+        
+        (PLAYER_OG_TEAM, PLAYER_1, False),
+        (PLAYER_1, PLAYER_OG_TEAM, False),
         
         (PLAYER_2, PLAYER_1, False),
         (PLAYER_ALLY, PLAYER_OG_TEAM, True),

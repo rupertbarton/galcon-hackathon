@@ -13,8 +13,8 @@ TEAM_ENEMY = Team("enemy", "red")
 PLAYER_1 = Player("p1", "blue", lambda _: [], team=TEAM_ALLY)
 PLAYER_2 = Player("p2", "red", lambda _: [])
 
-def _create_planet(troop_count, player):
-    return Planet(Coordinates(0, 0), 5, 5, troop_count, owner=player)
+def _create_planet(troop_count, player, troop_production=5):
+    return Planet(Coordinates(0, 0), 5, troop_production, troop_count, owner=player)
 
 def _create_fleet(troop_count, player, distance=0, destination=_create_planet(0, None)):
     return Fleet(Coordinates(0, distance), destination, troop_count, 5, player)
@@ -36,6 +36,19 @@ def test_combat(inbound_fleets: List[Fleet], initial_planet: Planet, expected_fi
     assert initial_planet.owner == expected_final_planet.owner
     assert initial_planet.troop_count == expected_final_planet.troop_count
     assert initial_planet.arriving_fleets == []
+    
+
+@pytest.mark.parametrize(
+    "initial_planet,expected_final_planet",
+    [
+        (_create_planet(5, PLAYER_1, 5), _create_planet(10, PLAYER_1, 5)),
+    ],
+)
+def test_run(initial_planet: Planet, expected_final_planet: Planet):
+
+    initial_planet.run()
+    assert initial_planet.owner == expected_final_planet.owner
+    assert initial_planet.troop_count == expected_final_planet.troop_count
 
 
 # class Planet:

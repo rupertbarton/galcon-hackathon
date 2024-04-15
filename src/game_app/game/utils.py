@@ -47,7 +47,9 @@ def is_fleet_reinforcing(fleet):
         return False
     elif fleet.owner.id == fleet.destination.owner.id:
         return True
-    elif fleet.owner.team == None or fleet.destination.owner == None:
+    elif fleet.owner.team == None or fleet.destination.owner.team == None:
         return False
     elif fleet.owner.team.id == fleet.destination.owner.team.id:
         return True
+    else:
+        return False
