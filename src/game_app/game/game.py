@@ -26,7 +26,7 @@ class Game:
     def __init__(
         self,
         players: list[Player],
-        starting_map: List[Planet] = None,
+        starting_map: Galaxy = None,
         history: List[Galaxy] = None,
         max_turn_limit: int = 500,
     ):
@@ -42,7 +42,7 @@ class Game:
         self.players = players
 
         if starting_map:
-            self.history = [Galaxy(planets=starting_map, fleets=[])]
+            self.history = [starting_map]
         else:
             self.history = history
         self.current_state = copy.deepcopy(self.history[-1])
@@ -144,7 +144,6 @@ class Game:
             for troops in self.current_state.planets + self.current_state.fleets:
                 if troops.owner:
                     troops_counts[troops.owner.id]["count"] += troops.troop_count
-            print(troops_counts.values())
             self.winner = max(troops_counts.values(), key=lambda p: p["count"])[
                 "player"
             ]

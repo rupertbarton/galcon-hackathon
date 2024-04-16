@@ -23,7 +23,7 @@ player_list = [player_3, player_2, player_1, player_4]
 
 starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
 
-game = Game(player_list, starting_map.planets, max_turn_limit=1000)
+game = Game(player_list, starting_map, max_turn_limit=1000)
 game.run()
 
 print(f"THE WINNER IS: {game.winner.name}")

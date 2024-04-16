@@ -30,8 +30,6 @@ class Planet:
     def calculate_combat(self):
         self.arriving_fleets.sort(key=get_time_for_fleet_to_arrive)
         for fleet in self.arriving_fleets[:]:
-            print(fleet.owner.name)
-            print(self.troop_count)
             if is_fleet_reinforcing(fleet):
                 self.troop_count += fleet.troop_count
             else:
