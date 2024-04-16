@@ -12,4 +12,4 @@ class Team:
         Team.team_counter += 1
 
     def to_json(self):
-        return {"name": self.name, "colour": self.colour}
+        return {"n": self.name, "c": self.colour}

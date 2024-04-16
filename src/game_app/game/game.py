@@ -46,8 +46,9 @@ class Game:
         else:
             self.history = history
         self.current_state = copy.deepcopy(self.history[-1])
-        self.winner = None
+        self.winner: Player = None
         self.max_turn_limit = max_turn_limit
+        self.finished = False
         self.id = f"G{Game.game_counter}"
         Game.game_counter += 1
 
@@ -106,7 +107,7 @@ class Game:
             logger.warn(
                 f"Player {order.player.name} just tried to create an order with more troops than are available"
             )
-            return True
+            return False
         return True
 
     def _move_fleets(self):
@@ -127,14 +128,14 @@ class Game:
             if planet.arriving_fleets:
                 planet.calculate_combat()
 
-    def _check_for_winner(self):
-        remaining_teams = set()
+    def _check_for_end(self):
+        remaining_players = set()
 
         for troops in self.current_state.planets + self.current_state.fleets:
             if troops.owner:
-                remaining_teams.add(troops.owner)
-        if len(remaining_teams) <= 1:
-            self.winner = remaining_teams.pop()
+                remaining_players.add(troops.owner)
+        if len(remaining_players) <= 1:
+            self.finished = True
 
     def _calculate_winner(self):
         if not self.winner:
@@ -149,15 +150,16 @@ class Game:
             ]
 
     def run(self):
-        while not self.winner and len(self.history) < self.max_turn_limit:
+        while not self.finished and len(self.history) <= self.max_turn_limit:
             orders = self._get_player_orders()
             self._create_fleets(orders)
             self._move_fleets()
             self._calculate_combat()
             self._iterate_planets()
-            self._check_for_winner()
+            self._check_for_end()
             self._save_state()
         self._calculate_winner()
+        return self.winner
 
     def to_json(self):
         return [galaxy.to_json() for galaxy in self.history]

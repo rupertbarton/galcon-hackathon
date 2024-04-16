@@ -5,54 +5,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script>
-
-
+        
+        
         window.onload = async function () {
             isPlaying = true
-
+            
             var play_button = document.getElementById('play')
             var pause_button = document.getElementById('pause')
             play_pause_buttons = [play_button, pause_button]
-
-            var set_play_pause_button = () => {
-                var active_play_pause_button;
-                if (isPlaying) {
-                    active_play_pause_button = pause_button;
-                }
-                else {
-                    active_play_pause_button = play_button;
-                }
-                play_button.style.display = 'none';
-                pause_button.style.display = 'none';
-                active_play_pause_button.style.display = 'block';
-            }
-
-            set_play_pause_button()
-
-            play_pause_buttons.map(play_pause_button => play_pause_button.addEventListener("click", (e) => {
-                console.log("triggered")
-                console.log("start", isPlaying)
-                isPlaying = !isPlaying
-                console.log("end", isPlaying)
-                set_play_pause_button()
-            }));
-
-
-            var response = await fetch("http://127.0.0.1:5500/src/game_app/sample.json", {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-                .then((data) => {
-                    return data.json();
-                });
-
-            var index = 0
-
-            var data_points = [...response[index].planets.map(planet => planet.position),
-            ...response[index].fleets.map(planet => planet.position)]
-
+            
+            
+            var response;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://127.0.0.1:5500/src/game_app/sample.json.gz', true);
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function () {
+                var result = pako.inflate(xhr.response, {to: 'string'});
+                response = JSON.parse(result)
+            };
+            xhr.send()
+            
+            
+            var data_points = []
+            
             var chart = new CanvasJS.Chart("chartContainer", {
                 zoomEnabled: true,
                 zoomType: "xy",
@@ -75,47 +50,67 @@
                     dataPoints: data_points
                 }]
             });
-
+            
             chart.render();
-
+            
+            var index = 0
             var updateChart = () => {
                 if (index >= response.length) {
                     isPlaying = false
+                    set_play_pause_button()
                 }
-
                 fleet_data = response[index].fleets.map(fleet => (
-                    { ...fleet.position, color: fleet?.owner?.colour || "grey", markerSize: 4 + fleet.troop_count / 7, markerType: "triangle" }
-                ))
-
-                planet_data = response[index].planets.map(planet => (
-                    { ...planet.position, color: planet.owner?.colour || "grey", markerSize: planet.radius * 100 }
-                ))
-
-                data_points = [...planet_data, ...fleet_data]
-                chart.data[0].set("dataPoints", data_points)
-                chart.options.title.text = "Update" + index
-                console.log(isPlaying)
-                if (isPlaying) {
-                    index += 1;
+                    { ...fleet.p, color: fleet?.o?.c || "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle" }
+                    ))
+                    
+                    planet_data = response[index].planets.map(planet => (
+                        { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100 }
+                        ))
+                        
+                        data_points = [...planet_data, ...fleet_data]
+                        chart.data[0].set("dataPoints", data_points)
+                        chart.options.title.text = "Turn number: " + index
+                        document.querySelector('progress').value = index/response.length
+                        if (isPlaying) {
+                            index += 1;
+                        }
+                    }
+                    
+                    setInterval(function () { updateChart() }, 50)
+                    
+                    progress.addEventListener("click", (e) => {
+                        const pos =
+                        (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
+                        progress.offsetWidth;
+                        index = Math.round(pos * response.length);
+                    });
+                    var set_play_pause_button = () => {
+                        var active_play_pause_button;
+                        if (isPlaying) {
+                            active_play_pause_button = pause_button;
+                        }
+                        else {
+                            active_play_pause_button = play_button;
+                        }
+                        play_button.style.display = 'none';
+                        pause_button.style.display = 'none';
+                        active_play_pause_button.style.display = 'block';
+                    }
+                    
+                    set_play_pause_button()
+                    
+                    play_pause_buttons.map(play_pause_button => play_pause_button.addEventListener("click", (e) => {
+                        isPlaying = !isPlaying
+                        set_play_pause_button()
+                    }));
                 }
-            }
-
-            setInterval(function () { updateChart() }, 50)
-
-            progress.addEventListener("click", (e) => {
-                const pos =
-                    (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
-                    progress.offsetWidth;
-                index = Math.round(pos * response.length);
-            });
-        }
-
-    </script>
+                
+                </script>
 </head>
 
 <body>
     <div id="chartContainer"
-        style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
+    style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
     </div>
 
     <!-- https://developer.mozilla.org/en-US/docs/Web/Media/Audio_and_video_delivery/Video_player_styling_basics -->
@@ -130,6 +125,9 @@
     </div>
 </body>
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"
+    integrity="sha512-g2TeAWw5GPnX7z0Kn8nFbYfeHcvAu/tx6d6mrLe/90mkCxO+RcptyYpksUz35EO337F83bZwcmUyHiHamspkfg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 <style>
@@ -147,7 +145,7 @@
         margin-left: 0.1953125%;
         display: block;
     }
-    
+
     .controls .progress {
         cursor: pointer;
         width: 90%;
@@ -171,7 +169,7 @@
     progress::-webkit-progress-value {
         background-color: #0095dd;
     }
-    
+
     .controls button {
         margin-left: 0;
         display: none;

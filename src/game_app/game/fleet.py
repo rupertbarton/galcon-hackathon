@@ -25,10 +25,10 @@ class Fleet:
 
     def to_json(self):
         return {
-            "position": self.position.to_json(),
+            "p": self.position.to_json(),
             # "destination": self.destination.to_json(),
-            "troop_count": self.troop_count,
+            "t": self.troop_count,
             # "speed": self.speed,
-            "owner": self.owner.to_json(),
+            "o": self.owner.to_json(),
             # "id": self.id
         }
