@@ -28,10 +28,10 @@ player_4]
 
 starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
 
-game = Game(player_list, starting_map, max_turn_limit=1000)
+game = Game(player_list, starting_map, max_turn_limit=100)
 game.run()
 
-print(f"THE WINNER IS: {game.winner.name}")
+print(f"THE WINNER IS: {[winner.name for winner in game.winners]}")
 
 # draw_game(game.history)
 

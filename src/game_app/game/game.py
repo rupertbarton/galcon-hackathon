@@ -5,7 +5,7 @@ from game.fleet import Fleet
 from game.order import Order
 from game.utils import get_next_fleet_coords, get_distance
 
-from typing import List
+from typing import List, Set
 import copy
 import logging
 import sys
@@ -46,7 +46,7 @@ class Game:
         else:
             self.history = history
         self.current_state = copy.deepcopy(self.history[-1])
-        self.winner: Player = None
+        self.winners: Set[Player] = set()
         self.max_turn_limit = max_turn_limit
         self.finished = False
         self.id = f"G{Game.game_counter}"
@@ -60,8 +60,8 @@ class Game:
             for p_order in player.get_next_orders(player, self.current_state):
                 try:
                     current_p_orders.append(Order(**p_order, player=player))
-                except:
-                    logger.warn(f"Invalid order passed: {p_order}")
+                except Exception as e:
+                    logger.warn(f"Invalid order passed: {p_order} : {e}")
             all_orders += current_p_orders
 
         return all_orders
@@ -119,9 +119,7 @@ class Game:
                 fleet.destination.arriving_fleets.append(fleet)
                 self.current_state.fleets.remove(fleet)
             else:
-                fleet.position = get_next_fleet_coords(
-                    fleet.position, fleet.destination.position, fleet.speed
-                )
+                fleet.move()
 
     def _calculate_combat(self):
         for planet in self.current_state.planets:
@@ -137,17 +135,28 @@ class Game:
         if len(remaining_players) <= 1:
             self.finished = True
 
-    def _calculate_winner(self):
-        if not self.winner:
-            troops_counts = {
-                player.id: {"player": player, "count": 0} for player in self.players
-            }
-            for troops in self.current_state.planets + self.current_state.fleets:
-                if troops.owner:
-                    troops_counts[troops.owner.id]["count"] += troops.troop_count
-            self.winner = max(troops_counts.values(), key=lambda p: p["count"])[
-                "player"
-            ]
+    def _calculate_winners(self):
+        troops_counts = {
+            player.id: {"player": player, "count": 0} for player in self.players
+        }
+        for troops in self.current_state.planets + self.current_state.fleets:
+            if troops.owner:
+                troops_counts[troops.owner.id]["count"] += troops.troop_count
+        current_winner = max(troops_counts.values(), key=lambda p: p["count"])
+
+        self.winners.add(current_winner["player"])
+
+        self.winners.update([count["player"] for count in troops_counts.values() if count["count"] == current_winner["count"]])
+
+        # Calculate winners due to being on the winning team
+
+        team_winners = set()
+        for winner in self.winners:
+            for player in self.players:
+                if winner.team and player.team and winner.team.id == player.team.id:
+                    team_winners.add(player)
+        self.winners.update(team_winners)
+
 
     def run(self):
         while not self.finished and len(self.history) <= self.max_turn_limit:
@@ -158,8 +167,8 @@ class Game:
             self._iterate_planets()
             self._check_for_end()
             self._save_state()
-        self._calculate_winner()
-        return self.winner
+        self._calculate_winners()
+        return self.winners
 
     def to_json(self):
         return [galaxy.to_json() for galaxy in self.history]
