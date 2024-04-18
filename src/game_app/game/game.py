@@ -64,22 +64,21 @@ class Game:
                     source = self.planet_dict[p_order["source"]]
                     destination = self.planet_dict[p_order["destination"]]
                     troop_count = p_order["troop_count"]
-                    current_p_orders.append(Order(source, destination, troop_count, player=player))
+                    current_p_orders.append(
+                        Order(source, destination, troop_count, player=player)
+                    )
                 except Exception as e:
                     logger.warn(f"Invalid order passed: {p_order} : {e}")
             all_orders += current_p_orders
 
         return all_orders
 
-
     def _iterate_planets(self):
         for planet in self.current_state.planets:
             planet.iterate()
 
-
     def _save_state(self):
         self.history.append(copy.deepcopy(self.current_state))
-
 
     def _create_fleets(self, orders: List[Order]):
         for order in orders:
@@ -99,7 +98,6 @@ class Game:
                     )
                     order.source.troop_count -= troop_count
                     self.current_state.fleets.append(new_fleet)
-
 
     def _is_order_valid(self, order: Order):
         if order.source.owner == None:
@@ -130,12 +128,10 @@ class Game:
             else:
                 fleet.move()
 
-
     def _calculate_combat(self):
         for planet in self.current_state.planets:
             if planet.arriving_fleets:
                 planet.calculate_combat()
-
 
     def _check_for_end(self):
         remaining_player_ids = set()
@@ -145,12 +141,15 @@ class Game:
                 remaining_player_ids.add(troops.owner.id)
         if len(remaining_player_ids) <= 1:
             self.finished = True
-            
-        remaining_players = filter(lambda player: player.id in remaining_player_ids, self.players)
-        if all([player.team for player in remaining_players]) and len(set([player.team.id for player in remaining_players])) <= 1:
-            self.finished = True
 
-            
+        remaining_players = filter(
+            lambda player: player.id in remaining_player_ids, self.players
+        )
+        if (
+            all([player.team for player in remaining_players])
+            and len(set([player.team.id for player in remaining_players])) <= 1
+        ):
+            self.finished = True
 
     def _calculate_winners(self):
         troops_counts = {
@@ -163,7 +162,13 @@ class Game:
 
         self.winners.add(current_winner["player"])
 
-        self.winners.update([count["player"] for count in troops_counts.values() if count["count"] == current_winner["count"]])
+        self.winners.update(
+            [
+                count["player"]
+                for count in troops_counts.values()
+                if count["count"] == current_winner["count"]
+            ]
+        )
 
         # Calculate winners due to being on the winning team
 
@@ -173,7 +178,6 @@ class Game:
                 if winner.team and player.team and winner.team.id == player.team.id:
                     team_winners.add(player)
         self.winners.update(team_winners)
-
 
     def run(self):
         while not self.finished and len(self.history) <= self.max_turn_limit:

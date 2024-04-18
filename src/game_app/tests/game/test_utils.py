@@ -79,10 +79,8 @@ PLAYER_ENEMY = Player("p5", "red", lambda _: [], TEAM_ENEMY)
         (PLAYER_OG_TEAM, PLAYER_ALLY, True),
         (PLAYER_OG_TEAM, PLAYER_ENEMY, False),
         (PLAYER_OG_TEAM, None, False),
-        
         (PLAYER_OG_TEAM, PLAYER_1, False),
         (PLAYER_1, PLAYER_OG_TEAM, False),
-        
         (PLAYER_2, PLAYER_1, False),
         (PLAYER_ALLY, PLAYER_OG_TEAM, True),
         (PLAYER_ENEMY, PLAYER_OG_TEAM, False),
@@ -94,5 +92,5 @@ def test_is_fleet_reinforcing(fleet_owner, destination_owner, expected):
     fleet = Fleet(None, destination, None, None, fleet_owner)
 
     actual = is_fleet_reinforcing(fleet)
-    
+
     assert actual == expected
