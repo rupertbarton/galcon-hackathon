@@ -6,7 +6,7 @@ from game.utils import get_next_fleet_coords
 
 class Fleet:
     fleet_counter = 0
-    default_fleet_speed = 5
+    default_fleet_speed = 0.3
 
     def __init__(
         self,

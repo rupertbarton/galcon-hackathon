@@ -62,6 +62,6 @@ def test_combat(
 )
 def test_run(initial_planet: Planet, expected_final_planet: Planet):
 
-    initial_planet.run()
+    initial_planet.iterate()
     assert initial_planet.owner == expected_final_planet.owner
     assert initial_planet.troop_count == expected_final_planet.troop_count

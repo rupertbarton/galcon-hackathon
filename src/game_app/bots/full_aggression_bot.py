@@ -30,8 +30,8 @@ class FullAggressionBot(AbstractBot):
 
         for planet in self.own_planets:
             new_order = {
-                "source": planet,
-                "destination": self.current_target,
+                "source": planet.id,
+                "destination": self.current_target.id,
                 "troop_count": planet.troop_count,
             }
             orders.append(new_order)

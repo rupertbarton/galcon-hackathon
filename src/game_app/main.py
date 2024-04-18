@@ -26,9 +26,9 @@ player_2,
 player_1, 
 player_4]
 
-starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
+starting_map = SpokeMapGenerator(20, 10, player_list).create_map()
 
-game = Game(player_list, starting_map, max_turn_limit=100)
+game = Game(player_list, starting_map, max_turn_limit=1000)
 game.run()
 
 print(f"THE WINNER IS: {[winner.name for winner in game.winners]}")

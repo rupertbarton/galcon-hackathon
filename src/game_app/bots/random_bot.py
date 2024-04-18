@@ -14,8 +14,8 @@ class RandomBot(AbstractBot):
         for planet in self.own_planets:
             if random.random() > 0.5:
                 new_order = {
-                    "source": planet,
-                    "destination": random.choice(self.current_state.planets),
+                    "source": planet.id,
+                    "destination": random.choice(self.current_state.planets).id,
                     "troop_count": planet.troop_count * random.random(),
                 }
                 orders.append(new_order)

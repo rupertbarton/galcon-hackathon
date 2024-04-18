@@ -23,7 +23,7 @@ class Planet:
         self.id = f"P{Planet.planet_counter}"
         Planet.planet_counter += 1
 
-    def run(self):
+    def iterate(self):
         if not self.owner == None:
             self.troop_count += self.troop_production_rate
 

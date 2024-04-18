@@ -77,13 +77,13 @@ def test_orders_can_be_submitted():
     PLAYER_1_PLANET = Planet(Coordinates(10, 0), 2, 0, 10, owner=PLAYER_1)
     PLAYER_ATTACKER_PLANET = Planet(Coordinates(-10, 0), 2, 0, 100, owner=None)
     PLAYER_ATTACKER = Player("p6", "red", lambda _, current_state: [{
-        "source": current_state.planets[1],
-        "destination": current_state.planets[0],
+        "source": current_state.planets[1].id,
+        "destination": current_state.planets[0].id,
         "troop_count": 100
     }])
     PLAYER_ATTACKER_PLANET.owner = PLAYER_ATTACKER
 
-    game = Game([PLAYER_1, PLAYER_ATTACKER], Galaxy([PLAYER_1_PLANET, PLAYER_ATTACKER_PLANET]), max_turn_limit=10)
+    game = Game([PLAYER_1, PLAYER_ATTACKER], Galaxy([PLAYER_1_PLANET, PLAYER_ATTACKER_PLANET]), max_turn_limit=1000)
     game.run()
     assert game.winners.pop().id is PLAYER_ATTACKER.id
     assert len(game.history) < 100

@@ -42,14 +42,16 @@ class Game:
         self.players = players
 
         if starting_map:
-            self.history = [starting_map]
+            self.current_state = starting_map
+            self.history = [copy.deepcopy(self.current_state)]
         else:
             self.history = history
-        self.current_state = copy.deepcopy(self.history[-1])
+            self.current_state = copy.deepcopy(self.history[-1])
         self.winners: Set[Player] = set()
         self.max_turn_limit = max_turn_limit
         self.finished = False
         self.id = f"G{Game.game_counter}"
+        self.planet_dict = {planet.id: planet for planet in self.current_state.planets}
         Game.game_counter += 1
 
     def _get_player_orders(self) -> List[Order]:
@@ -59,19 +61,25 @@ class Game:
             current_p_orders = []
             for p_order in player.get_next_orders(player, self.current_state):
                 try:
-                    current_p_orders.append(Order(**p_order, player=player))
+                    source = self.planet_dict[p_order["source"]]
+                    destination = self.planet_dict[p_order["destination"]]
+                    troop_count = p_order["troop_count"]
+                    current_p_orders.append(Order(source, destination, troop_count, player=player))
                 except Exception as e:
                     logger.warn(f"Invalid order passed: {p_order} : {e}")
             all_orders += current_p_orders
 
         return all_orders
 
+
     def _iterate_planets(self):
         for planet in self.current_state.planets:
-            planet.run()
+            planet.iterate()
+
 
     def _save_state(self):
         self.history.append(copy.deepcopy(self.current_state))
+
 
     def _create_fleets(self, orders: List[Order]):
         for order in orders:
@@ -91,6 +99,7 @@ class Game:
                     )
                     order.source.troop_count -= troop_count
                     self.current_state.fleets.append(new_fleet)
+
 
     def _is_order_valid(self, order: Order):
         if order.source.owner == None:
@@ -121,19 +130,27 @@ class Game:
             else:
                 fleet.move()
 
+
     def _calculate_combat(self):
         for planet in self.current_state.planets:
             if planet.arriving_fleets:
                 planet.calculate_combat()
 
+
     def _check_for_end(self):
-        remaining_players = set()
+        remaining_player_ids = set()
 
         for troops in self.current_state.planets + self.current_state.fleets:
             if troops.owner:
-                remaining_players.add(troops.owner)
-        if len(remaining_players) <= 1:
+                remaining_player_ids.add(troops.owner.id)
+        if len(remaining_player_ids) <= 1:
             self.finished = True
+            
+        remaining_players = filter(lambda player: player.id in remaining_player_ids, self.players)
+        if all([player.team for player in remaining_players]) and len(set([player.team.id for player in remaining_players])) <= 1:
+            self.finished = True
+
+            
 
     def _calculate_winners(self):
         troops_counts = {
@@ -161,12 +178,13 @@ class Game:
     def run(self):
         while not self.finished and len(self.history) <= self.max_turn_limit:
             orders = self._get_player_orders()
-            self._create_fleets(orders)
             self._move_fleets()
+            self._create_fleets(orders)
             self._calculate_combat()
             self._iterate_planets()
             self._check_for_end()
             self._save_state()
+            print(len(self.history))
         self._calculate_winners()
         return self.winners
 

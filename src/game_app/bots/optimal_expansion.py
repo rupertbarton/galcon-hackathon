@@ -69,8 +69,8 @@ class OptimalExpansion(AbstractBot):
                             available_troops,
                         )
                     new_order = {
-                        "source": planet,
-                        "destination": enemy_p,
+                        "source": planet.id,
+                        "destination": enemy_p.id,
                         "troop_count": troops_to_send,
                     }
                     orders.append(new_order)
