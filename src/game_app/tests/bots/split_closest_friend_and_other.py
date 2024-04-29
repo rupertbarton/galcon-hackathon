@@ -18,22 +18,22 @@ class SplitClosestFriendAndOther(AbstractBot):
         for planet in self.own_planets:
             if len(self.friendly_planets) > 1:
                 new_friend_order = {
-                    "source": planet.id,
+                    "source": planet,
                     "destination": find_nearest_planet(
                         planet.position,
                         [p for p in self.friendly_planets if not p.id == planet.id],
-                    ).id,
-                    "troop_count": round(planet.troop_count / 2),
+                    ),
+                    "troop_count": planet.troop_count / 2,
                 }
                 orders.append(new_friend_order)
 
             if self.neutral_planets + self.enemy_planets:
                 new_non_friend_order = {
-                    "source": planet.id,
+                    "source": planet,
                     "destination": find_nearest_planet(
                         planet.position, self.neutral_planets + self.enemy_planets
-                    ).id,
-                    "troop_count": round(planet.troop_count / 2),
+                    ),
+                    "troop_count": planet.troop_count / 2,
                 }
                 orders.append(new_non_friend_order)
         return orders

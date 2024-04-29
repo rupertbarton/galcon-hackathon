@@ -1,6 +1,7 @@
 from game.coordinates import Coordinates
 from game.planet import Planet
 from game.player import Player
+from game.utils import get_next_fleet_coords
 
 
 class Fleet:
@@ -22,6 +23,11 @@ class Fleet:
         self.owner = owner
         self.id = f"F{Fleet.fleet_counter}"
         Fleet.fleet_counter += 1
+
+    def move(self):
+        self.position = get_next_fleet_coords(
+            self.position, self.destination.position, self.speed
+        )
 
     def to_json(self):
         return {

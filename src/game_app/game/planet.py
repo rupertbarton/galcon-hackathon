@@ -9,9 +9,9 @@ class Planet:
     def __init__(
         self,
         position: Coordinates,
-        radius,
-        troop_production_rate,
-        troop_count,
+        radius: int | float,
+        troop_production_rate: int | float,
+        troop_count: int | float,
         owner: Player = None,
     ):
         self.position = position
@@ -23,7 +23,7 @@ class Planet:
         self.id = f"P{Planet.planet_counter}"
         Planet.planet_counter += 1
 
-    def run(self):
+    def iterate(self):
         if not self.owner == None:
             self.troop_count += self.troop_production_rate
 
