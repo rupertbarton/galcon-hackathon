@@ -130,10 +130,42 @@ def test_game_end_correctly(
 
 def test_orders_can_be_submitted():
     PLAYER_1_PLANET = Planet(Coordinates(10, 0), 2, 0, 10, owner=PLAYER_1)
-    PLAYER_ATTACKER_PLANET = Planet(Coordinates(-10, 0), 2, 0, 100, owner=None)
+    troop_count = 100
+    PLAYER_ATTACKER_PLANET = Planet(Coordinates(-10, 0), 2, 0, troop_count, owner=None)
     target_id = PLAYER_1_PLANET.id
     source_id = PLAYER_ATTACKER_PLANET.id
+
+    PLAYER_ATTACKER = Player(
+        "p6",
+        "red",
+        lambda *_: [
+            {"source": source_id, "destination": target_id, "troop_count": troop_count}
+        ],
+    )
+    PLAYER_ATTACKER_PLANET.owner = PLAYER_ATTACKER
+
+    game = Game(
+        [PLAYER_1, PLAYER_ATTACKER],
+        Galaxy([PLAYER_1_PLANET, PLAYER_ATTACKER_PLANET]),
+        max_turn_limit=2,
+    )
+    game.run()
+    assert len(game.history[0].fleets) == 0
+    assert len(game.history[1].fleets) == 1
+
+    # Check that another order isn't made (as troops is 0)
+    assert len(game.history[2].fleets) == 1
+    assert game.history[1].fleets[0].destination.id == target_id
+    assert game.history[1].fleets[0].troop_count == troop_count
+
+
+def test_an_order_cant_be_made_from_an_enemy_planet():
     troop_count = 100
+    PLAYER_1_PLANET = Planet(Coordinates(10, 0), 2, 0, troop_count, owner=PLAYER_1)
+    PLAYER_ATTACKER_PLANET = Planet(Coordinates(-10, 0), 2, 0, troop_count, owner=None)
+
+    source_id = PLAYER_1_PLANET.id
+    target_id = PLAYER_ATTACKER_PLANET.id
 
     PLAYER_ATTACKER = Player(
         "p6",
@@ -151,6 +183,35 @@ def test_orders_can_be_submitted():
     )
     game.run()
     assert len(game.history[0].fleets) == 0
-    assert len(game.history[1].fleets) == 1
-    assert game.history[1].fleets[0].destination.id == target_id
-    assert game.history[1].fleets[0].troop_count == troop_count
+    assert len(game.history[1].fleets) == 0
+
+
+def test_an_order_cant_be_made_with_more_than_available():
+    troop_count = 100
+    PLAYER_1_PLANET = Planet(Coordinates(10, 0), 2, 0, troop_count, owner=PLAYER_1)
+    PLAYER_ATTACKER_PLANET = Planet(Coordinates(-10, 0), 2, 0, troop_count, owner=None)
+
+    target_id = PLAYER_1_PLANET.id
+    source_id = PLAYER_ATTACKER_PLANET.id
+
+    PLAYER_ATTACKER = Player(
+        "p6",
+        "red",
+        lambda *_: [
+            {
+                "source": source_id,
+                "destination": target_id,
+                "troop_count": troop_count * 10,
+            }
+        ],
+    )
+    PLAYER_ATTACKER_PLANET.owner = PLAYER_ATTACKER
+
+    game = Game(
+        [PLAYER_1, PLAYER_ATTACKER],
+        Galaxy([PLAYER_1_PLANET, PLAYER_ATTACKER_PLANET]),
+        max_turn_limit=1,
+    )
+    game.run()
+    assert len(game.history[0].fleets) == 0
+    assert len(game.history[1].fleets) == 0
