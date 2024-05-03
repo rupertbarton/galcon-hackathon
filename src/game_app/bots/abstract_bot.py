@@ -14,7 +14,9 @@ class AbstractBot:
             return False
         elif player.id == self.current_player.id:
             return False
-        elif player.team == None:
+        elif player.team is None:
+            return True
+        elif self.current_player.team is None:
             return True
         elif player.team.id == self.current_player.team.id:
             return False
