@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "game-app"
+version = "0.1.0"
+description = ""
+authors = ["Rupert Barton <rbarton@scottlogic.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+matplotlib = "^3.8.4"
+torch = "^2.3.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+pytest = "^8.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
