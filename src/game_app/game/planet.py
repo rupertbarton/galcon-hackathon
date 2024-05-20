@@ -49,3 +49,12 @@ class Planet:
             "o": self.owner.to_json() if self.owner else None,
             # "id": self.id
         }
+
+    def deep_copy(self):
+        return Planet(
+            self.position,
+            self.radius,
+            self.troop_production_rate,
+            self.troop_count,
+            self.owner,
+        )

@@ -38,3 +38,12 @@ class Fleet:
             "o": self.owner.to_json(),
             # "id": self.id
         }
+
+    def deep_copy(self):
+        return Fleet(
+            self.position,
+            self.destination,
+            self.troop_count,
+            self.speed,
+            self.owner,
+        )

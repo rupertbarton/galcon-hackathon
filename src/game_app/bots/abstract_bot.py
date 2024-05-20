@@ -1,6 +1,7 @@
 from game.galaxy import Galaxy
 from game.player import Player
 from game.planet import Planet
+from typing import List
 
 
 class AbstractBot:
@@ -9,7 +10,7 @@ class AbstractBot:
         self.current_state = Galaxy([], [])
         self.current_player = None
 
-    def is_enemy_player(self, player: Player):
+    def is_enemy_player(self, player: Player)  -> bool:
         if not player:
             return False
         elif player.id == self.current_player.id:
@@ -23,32 +24,36 @@ class AbstractBot:
         else:
             return True
 
-    def is_neutral_planet(self, planet: Planet):
+    def is_neutral_planet(self, planet: Planet) -> bool:
         if planet.owner == None:
             return True
         else:
             return False
 
-    def is_own_planet(self, planet: Planet):
+    def is_own_planet(self, planet: Planet) -> bool:
         if planet.owner and planet.owner.id == self.current_player.id:
             return True
         else:
             return False
 
-    def is_friendly_planet(self, planet: Planet):
+    def is_friendly_planet(self, planet: Planet) -> bool:
         if not self.is_neutral_planet(planet) and not self.is_enemy_planet(planet):
             return True
         else:
             return False
 
-    def is_enemy_planet(self, planet: Planet):
+    def is_enemy_planet(self, planet: Planet) -> bool:
         if not self.is_neutral_planet(planet) and self.is_enemy_player(planet.owner):
             return True
         else:
             return False
 
     @property
-    def own_planets(self):
+    def all_planets(self) -> List[Planet]:
+        return self.current_state.planets
+
+    @property
+    def own_planets(self) -> List[Planet]:
         return [
             planet
             for planet in self.current_state.planets
@@ -56,7 +61,7 @@ class AbstractBot:
         ]
 
     @property
-    def enemy_planets(self):
+    def enemy_planets(self) -> List[Planet]:
         return [
             planet
             for planet in self.current_state.planets
@@ -64,7 +69,7 @@ class AbstractBot:
         ]
 
     @property
-    def ally_planets(self):
+    def ally_planets(self) -> List[Planet]:
         return [
             planet
             for planet in self.current_state.planets
@@ -72,7 +77,7 @@ class AbstractBot:
         ]
 
     @property
-    def neutral_planets(self):
+    def neutral_planets(self) -> List[Planet]:
         return [
             planet
             for planet in self.current_state.planets
@@ -80,7 +85,7 @@ class AbstractBot:
         ]
 
     @property
-    def friendly_planets(self):
+    def friendly_planets(self) -> List[Planet]:
         return [
             planet
             for planet in self.current_state.planets

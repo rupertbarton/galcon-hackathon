@@ -43,10 +43,10 @@ class Game:
 
         if starting_map:
             self.current_state = starting_map
-            self.history = [copy.deepcopy(self.current_state)]
+            self.history = [self.current_state.deep_copy()]
         else:
             self.history = history
-            self.current_state = copy.deepcopy(self.history[-1])
+            self.current_state = self.history[-1].deep_copy()
         self.winners: Set[Player] = set()
         self.max_turn_limit = max_turn_limit
         self.finished = False
@@ -78,7 +78,9 @@ class Game:
             planet.iterate()
 
     def _save_state(self):
-        self.history.append(copy.deepcopy(self.current_state))
+        # self.history.append(copy.deepcopy(self.current_state))
+        self.history.append(self.current_state.deep_copy())
+
 
     def _create_fleets(self, orders: List[Order]):
         for order in orders:
