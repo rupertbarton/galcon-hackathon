@@ -17,12 +17,10 @@ from bots.dqn_ai.replay_memory import ReplayMemory, Transition
 
 import math
 import random
-from collections import namedtuple, deque
-from itertools import count
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 
 
 class DQNBot(AbstractBot):
@@ -151,15 +149,17 @@ class DQNBot(AbstractBot):
         self.optimizer.step()
         
     def calculate_reward(self, orders):
-        reward = -1
+        reward = 0
         
         for order in orders:
             source_planet = next(p for p in self.all_planets if p.id == order["source"])
             if (not source_planet.owner) or source_planet.owner.id != self.current_player.id:
-                reward -= 5
+                reward -= 100
             else:
                 self.number_of_valid_moves_made += 1
                 print("VALID MOVE MADE!!!")
+            for p in self.own_planets:
+                reward += p.troop_production_rate
         return reward
         
     def handle_iteration(self, current_player: Player, current_state: Galaxy, game_win: bool = None):

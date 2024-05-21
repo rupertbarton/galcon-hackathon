@@ -64,11 +64,11 @@
                     set_play_pause_button()
                 }
                 fleet_data = response[index].fleets.map(fleet => (
-                    { ...fleet.p, color: fleet?.o?.c || "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle" }
+                    { ...fleet.p, color: fleet?.o?.c || "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle", toolTipContent: `${fleet.t}` }
                 ))
 
                 planet_data = response[index].planets.map(planet => (
-                    { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100 }
+                    { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}` }
                 ))
 
                 data_points = [...planet_data, ...fleet_data]

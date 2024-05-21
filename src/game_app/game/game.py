@@ -57,7 +57,6 @@ class Game:
     def _get_player_orders(self) -> List[Order]:
         all_orders = []
         for player in self.players:
-
             current_p_orders = []
             for p_order in player.get_next_orders(player, self.current_state):
                 try:

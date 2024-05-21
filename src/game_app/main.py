@@ -22,16 +22,18 @@ player_2 = Player("Random", "blue", bot_2.create_orders)
 player_3 = Player("Aggressive", "green", bot_3.create_orders)
 player_4 = Player("OptimalExpansion", "yellow", bot_4.create_orders)
 player_5 = Player("DefensiveAnOptimalExpansionBot", "pink", bot_5.create_orders)
+player_6 = Player("DefensiveAnOptimalExpansionBot", "purple", bot_5.create_orders)
 
 player_list = [
-    player_3,
-      player_2,
-        player_1,
-          player_4,
-          player_5
-          ]
+  player_3,
+  player_2,
+  # player_1,
+  # player_4,
+  # player_5,
+  # player_6
+  ]
 
-starting_map = EvenDistributionMapGenerator(30, 10, player_list).create_map()
+starting_map = EvenDistributionMapGenerator(30, 20, player_list).create_map()
 
 game = Game(player_list, starting_map, max_turn_limit=1000)
 game.run()

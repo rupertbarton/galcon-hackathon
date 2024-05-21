@@ -44,7 +44,7 @@ class Planet:
         return {
             "p": self.position.to_json(),
             "r": self.radius,
-            # "troop_count": self.troop_count,
+            "t": self.troop_count,
             # "troop_production_rate": self.troop_production_rate,
             "o": self.owner.to_json() if self.owner else None,
             # "id": self.id

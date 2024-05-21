@@ -31,7 +31,7 @@ map_to_train = EvenDistributionMapGenerator(30, 10, player_list).create_map()
 training_bot = DQNBot(map_to_train)
 training_player = Player("DQN", "green", training_bot.handle_iteration)
 training_bot_1 = DQNBot(map_to_train)
-training_player_1 = Player("DQN", "pink", training_bot.handle_iteration)
+training_player_1 = Player("DQN", "pink", training_bot_1.handle_iteration)
 
 for planet in map_to_train.planets:
     if planet.owner and planet.owner.id == player_to_replace.id:
@@ -63,8 +63,8 @@ for i in range(100):
         json.dump(game.to_json(), zip_file, separators=(",", ":"))
     print(f"Game saved to {file_name}")
     
-    training_bot.handle_iteration(training_player, current_state=game.current_state, game_win = did_bot_win)
-    training_bot_1.handle_iteration(training_player_1, current_state=game.current_state, game_win = not did_bot_win)
+    # training_bot.handle_iteration(training_player, current_state=game.current_state, game_win = did_bot_win)
+    # training_bot_1.handle_iteration(training_player_1, current_state=game.current_state, game_win = not did_bot_win)
     print(i)
     del game
     
