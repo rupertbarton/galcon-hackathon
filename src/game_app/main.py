@@ -1,36 +1,37 @@
-from bots.defensive_and_optimal_expansion import DefensiveAndOptimalExpansionBot
-from map_generation.even_distribution_map_generator import EvenDistributionMapGenerator
-from map_generation.spoke_map_generator import SpokeMapGenerator
-from bots.random_bot import RandomBot
-from bots.full_aggression_bot import FullAggressionBot
-from bots.split_closest_friend_and_other import SplitClosestFriendAndOther
-from bots.optimal_expansion_bot import OptimalExpansionBot
-from game.player import Player
-from game.game import Game
-from game_draw.draw_game import draw_game
-import json
 import gzip
+import json
+
+from bots.defensive_and_optimal_expansion import DefensiveAndOptimalExpansionBot
+from bots.full_aggression_bot import FullAggressionBot
+from bots.optimal_expansion_bot import OptimalExpansionBot
+from bots.random_bot import RandomBot
+from bots.split_closest_friend_and_other import SplitClosestFriendAndOther
+from game.game import Game
+from game.player import Player
+from map_generation.even_distribution_map_generator import EvenDistributionMapGenerator
+from src.game_app.bots.dales_bot import DalesBot
 
 bot_1 = SplitClosestFriendAndOther()
 bot_2 = RandomBot()
 bot_3 = FullAggressionBot()
 bot_4 = OptimalExpansionBot()
 bot_5 = DefensiveAndOptimalExpansionBot()
+bot_6 = DalesBot()
 
 player_1 = Player("Split", "red", bot_1.create_orders)
 player_2 = Player("Random", "blue", bot_2.create_orders)
 player_3 = Player("Aggressive", "green", bot_3.create_orders)
 player_4 = Player("OptimalExpansion", "yellow", bot_4.create_orders)
 player_5 = Player("DefensiveAnOptimalExpansionBot", "pink", bot_5.create_orders)
-player_6 = Player("DefensiveAnOptimalExpansionBot", "purple", bot_5.create_orders)
+player_6 = Player("Dale", "purple", bot_6.create_orders)
 
 player_list = [
-  player_3,
-  player_2,
-  # player_1,
-  # player_4,
-  # player_5,
-  # player_6
+  # player_1, # split
+  # player_2, # random
+  # player_3, # Aggressive
+  # player_4, # Expansion
+  player_5, # Defend and expand
+  player_6
   ]
 
 starting_map = EvenDistributionMapGenerator(30, 20, player_list).create_map()

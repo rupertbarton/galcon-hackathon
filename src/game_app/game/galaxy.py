@@ -1,7 +1,9 @@
-from game.fleet import Fleet
-from game.planet import Planet
+
 
 from typing import List
+
+from src.game_app.game.fleet import Fleet
+from src.game_app.game.planet import Planet
 
 
 class Galaxy:

@@ -1,6 +1,6 @@
-from game.coordinates import Coordinates
-from game.player import Player
-from game.utils import get_time_for_fleet_to_arrive, is_fleet_reinforcing
+from src.game_app.game.coordinates import Coordinates
+from src.game_app.game.player import Player
+from src.game_app.game.utils import get_time_for_fleet_to_arrive, is_fleet_reinforcing
 
 
 class Planet:

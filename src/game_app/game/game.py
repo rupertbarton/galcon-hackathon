@@ -1,14 +1,14 @@
-from game.galaxy import Galaxy
-from game.player import Player
-from game.planet import Planet
-from game.fleet import Fleet
-from game.order import Order
-from game.utils import get_next_fleet_coords, get_distance
 
-from typing import List, Set
-import copy
+
 import logging
 import sys
+from typing import List, Set
+
+from src.game_app.game.fleet import Fleet
+from src.game_app.game.galaxy import Galaxy
+from src.game_app.game.order import Order
+from src.game_app.game.player import Player
+from src.game_app.game.utils import get_distance, get_next_fleet_coords
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(stream=sys.stdout)

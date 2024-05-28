@@ -1,7 +1,7 @@
-from game.coordinates import Coordinates
-from game.planet import Planet
-from game.player import Player
-from game.utils import get_next_fleet_coords
+from src.game_app.game.coordinates import Coordinates
+from src.game_app.game.planet import Planet
+from src.game_app.game.player import Player
+from src.game_app.game.utils import get_next_fleet_coords
 
 
 class Fleet:

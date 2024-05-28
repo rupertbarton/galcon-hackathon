@@ -1,11 +1,13 @@
-from game.galaxy import Galaxy
-from game.planet import Planet
-from map_generation.polar_coordinates import PolarCoordinates
-from map_generation.abstract_map_generator import AbstractMapGenerator
-from map_generation.utils import convert_polar_to_cartesian
+
 
 import math
 import random
+
+from src.game_app.game.galaxy import Galaxy
+from src.game_app.game.planet import Planet
+from src.game_app.map_generation.abstract_map_generator import AbstractMapGenerator
+from src.game_app.map_generation.polar_coordinates import PolarCoordinates
+from src.game_app.map_generation.utils import convert_polar_to_cartesian
 
 
 class EvenDistributionMapGenerator(AbstractMapGenerator):

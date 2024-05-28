@@ -1,7 +1,9 @@
-from game.galaxy import Galaxy
-from game.player import Player
-from game.planet import Planet
+
 from typing import List
+
+from src.game_app.game.galaxy import Galaxy
+from src.game_app.game.planet import Planet
+from src.game_app.game.player import Player
 
 
 class AbstractBot:
