@@ -48,7 +48,8 @@ game.run()
 
 print(f"THE WINNER IS: {[winner.name for winner in game.winners]}")
 
-with gzip.open(f"games/{GAME_NAME.replace(" ", "")}.json.gz", "wt", encoding="ascii") as zip_file:
+# TODO Investigate brotli compression
+with gzip.open(f"game_recordings/{GAME_NAME.replace(" ", "")}.json.gz", "wt", encoding="ascii") as zip_file:
     json.dump(game.to_json(), zip_file, separators=(",", ":"))
 
 print("end")

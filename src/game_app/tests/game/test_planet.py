@@ -8,10 +8,10 @@ from game.player import Player
 from game.team import Team
 
 TEAM_ALLY = Team("ally", "red")
-TEAM_ENEMY = Team("enemy", "red")
 
 PLAYER_1 = Player("p1", "blue", lambda _: [], team=TEAM_ALLY)
 PLAYER_2 = Player("p2", "red", lambda _: [])
+PLAYER_3 = Player("p3", "yellow", lambda _: [], team=TEAM_ALLY)
 
 
 def _create_planet(troop_count, player, troop_production=5):
@@ -37,6 +37,21 @@ def _create_fleet(troop_count, player, distance=0, destination=_create_planet(0,
             [(5, PLAYER_1), (10, PLAYER_2)],
             _create_planet(5, PLAYER_1),
             _create_planet(0, PLAYER_1),
+        ),
+        (
+            [(10, PLAYER_3)],
+            _create_planet(0, PLAYER_1),
+            _create_planet(10, PLAYER_1),
+        ),
+        (
+            [(10, PLAYER_3), (20, PLAYER_2), (15, PLAYER_3)],
+            _create_planet(0, PLAYER_1),
+            _create_planet(5, PLAYER_3),
+        ),
+        (
+            [(10, PLAYER_3), (30, PLAYER_2), (15, PLAYER_3)],
+            _create_planet(0, PLAYER_1),
+            _create_planet(5, PLAYER_2),
         ),
     ],
 )

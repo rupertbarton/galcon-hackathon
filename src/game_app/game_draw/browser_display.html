@@ -22,7 +22,7 @@
             
             var response;
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", `http://127.0.0.1:5500/src/game_app/games/${file || default_file}.json.gz`, true);
+            xhr.open("GET", `http://localhost:8000/game_recordings/${file || default_file}.json.gz`, true);
             xhr.responseType = "arraybuffer";
             xhr.onload = function () {
                 var result = pako.inflate(xhr.response, { to: 'string' });

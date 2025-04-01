@@ -30,12 +30,20 @@ The winner of the game should be printed out to the console, and a file called `
 
 ## How to visualise a game
 
-Firstly you need to install the [Live Server VSCode extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer). This allows you to start a server locally that can return files on request. This is required so that the html file used to visualise games can access the game files locally.
+In `src/game_app/game_draw/run_server.py` lies the code that starts up a local server that enables recordings to be viewed in a browser.
 
-If you open `src/game_app/game_draw/browser_display.html` in a browser, and pass a query param of the game name in the "f" param, eg:
+Run `run_server.py` with:
+
+```bash
+python src/game_app/game_draw/run_server.py
+```
+
+And then in a browser navigate to `http://localhost:8000 and select whichever saved recording you want to view.
+
+You can also navigate to a recording directly by going to the following url, passing a query parameter of the saved recording you would like to view, eg:
 
 ```
-file:///C:/dev/galcon/src/game_app/game_draw/browser_display.html?f=ExampleGame
+http://localhost:8000/game_draw/browser_display.html?f=ExampleGame
 ```
 
 ## Creating a bot

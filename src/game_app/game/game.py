@@ -58,6 +58,8 @@ class Game:
         all_orders = []
         for player in self.players:
             current_p_orders = []
+
+            # TODO: Add timeout to kill bots that hang
             for p_order in player.get_next_orders(player, self.current_state):
                 try:
                     source = self.planet_dict[p_order["source"]]
