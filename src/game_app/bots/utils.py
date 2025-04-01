@@ -3,7 +3,7 @@ from game.planet import Planet
 from game.coordinates import Coordinates
 
 import math
-from typing import List
+from typing import List, TypedDict
 
 
 def find_nearest_planet(
@@ -28,3 +28,10 @@ def find_nearest_planet_to_a_planet(planet: Planet, planets: List[Planet]):
 def time_to_travel(start: Coordinates, end: Coordinates, speed: float):
     distance = get_distance(start, end)
     return math.ceil(distance / speed)
+
+
+Order = TypedDict("Order", {
+    "source": str,
+    "destination": str,
+    "troop_count": int,
+})

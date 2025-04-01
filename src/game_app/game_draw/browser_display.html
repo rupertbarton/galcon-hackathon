@@ -14,14 +14,15 @@
             var pause_button = document.getElementById('pause')
             play_pause_buttons = [play_button, pause_button]
 
+            
             current_url = new URL(window.location.href);
 
             file = current_url.searchParams.get("f")
-            default_file = ""
+            default_file = "ExampleGame"
             
             var response;
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", `http://127.0.0.1:5500/src/game_app/sample${file || default_file}.json.gz`, true);
+            xhr.open("GET", `http://127.0.0.1:5500/src/game_app/games/${file || default_file}.json.gz`, true);
             xhr.responseType = "arraybuffer";
             xhr.onload = function () {
                 var result = pako.inflate(xhr.response, { to: 'string' });

@@ -1,6 +1,7 @@
 from game.galaxy import Galaxy
 from game.player import Player
 from game.planet import Planet
+from bots.utils import Order
 from typing import List
 
 
@@ -92,6 +93,6 @@ class AbstractBot:
             if self.is_friendly_planet(planet)
         ]
 
-    def create_orders(self, current_player: Player, current_state: Galaxy):
+    def create_orders(self, current_player: Player, current_state: Galaxy) -> List[Order]:
         self.current_state = current_state
         self.current_player = current_player

@@ -21,7 +21,5 @@ class Player:
 
     def to_json(self):
         return {
-            # "name": self.name,
             "c": self.colour,
-            # "team": self.team.to_json() if self.team else None
         }

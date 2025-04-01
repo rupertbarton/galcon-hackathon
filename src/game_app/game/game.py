@@ -67,7 +67,7 @@ class Game:
                         Order(source, destination, troop_count, player=player)
                     )
                 except Exception as e:
-                    logger.warn(f"Invalid order passed: {p_order} : {e}")
+                    logger.warning(f"Invalid order passed: {p_order} : {e}")
             all_orders += current_p_orders
 
         return all_orders
@@ -112,7 +112,7 @@ class Game:
             )
             return False
         if order.troop_count > order.source.troop_count:
-            logger.warn(
+            logger.warning(
                 f"Player {order.player.name} just tried to create an order with more troops than are available"
             )
             return False
