@@ -34,8 +34,6 @@
             var data_points = []
 
             var chart = new CanvasJS.Chart("chartContainer", {
-                zoomEnabled: true,
-                zoomType: "xy",
                 title: {
                     fontColor: "white"
                 },
@@ -60,22 +58,24 @@
 
             var index = 0
             var updateChart = () => {
+                var players = response.players.reduce((acc, player) => {return {...acc, [player.id]: player}}, {})
                 if (index > response.length - 2) {
                     isPlaying = false
                     set_play_pause_button()
                 }
-                fleet_data = response[index].fleets.map(fleet => (
-                    { ...fleet.p, color: fleet?.o?.c || "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle", toolTipContent: `${fleet.t}` }
+                fleet_data = response.galaxies[index].fleets.map(fleet => (
+                    { ...fleet.p, color: fleet?.o ? players[fleet.o].c : "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle", toolTipContent: `${fleet.t}` }
                 ))
 
-                planet_data = response[index].planets.map(planet => (
-                    { ...planet.p, color: planet.o?.c || "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}` }
+                planet_data = response.galaxies[index].planets.map(planet => (
+                    { ...planet.p, color: planet.o ? players[planet.o].c : "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}` }
                 ))
 
                 data_points = [...planet_data, ...fleet_data]
                 chart.data[0].set("dataPoints", data_points)
                 chart.options.title.text = "Turn number: " + index
-                document.querySelector('progress').value = index / response.length
+
+                document.querySelector('progress').value = index / response.galaxies.length
                 if (isPlaying) {
                     index += 1;
                 }
@@ -87,7 +87,7 @@
                 const pos =
                     (e.pageX - progress.offsetLeft - progress.offsetParent.offsetLeft) /
                     progress.offsetWidth;
-                index = Math.round(pos * response.length);
+                index = Math.round(pos * response.galaxies.length);
             });
             var set_play_pause_button = () => {
                 var active_play_pause_button;
@@ -115,8 +115,10 @@
 
 <body>
     <div id="chartContainer"
-        style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
-    </div>
+    style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
+</div>
+<div id="pieContainer">
+</div>
 
     <!-- https://developer.mozilla.org/en-US/docs/Web/Media/Audio_and_video_delivery/Video_player_styling_basics -->
     <div id="video-controls" class="controls" data-state="hidden">

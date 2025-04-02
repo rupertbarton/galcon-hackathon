@@ -16,10 +16,15 @@ class Player:
         self.team = team
         self.get_next_orders = get_next_orders
 
-        self.id = f"Player{Player.player_counter}"
+        self.id = f"{Player.player_counter}"
         Player.player_counter += 1
 
     def to_json(self):
+        return self.id
+
+    def to_extended_json(self):
         return {
+            "n": self.name,
             "c": self.colour,
+            "id": self.id
         }

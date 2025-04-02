@@ -196,4 +196,7 @@ class Game:
         return self.winners
 
     def to_json(self):
-        return [galaxy.to_json() for galaxy in self.history]
+        return {
+            "galaxies": [galaxy.to_json() for galaxy in self.history],
+            "players": [player.to_extended_json() for player in self.players]
+            }
