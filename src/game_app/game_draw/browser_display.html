@@ -14,12 +14,12 @@
             var pause_button = document.getElementById('pause')
             play_pause_buttons = [play_button, pause_button]
 
-            
+
             current_url = new URL(window.location.href);
 
             file = current_url.searchParams.get("f")
             default_file = "ExampleGame"
-            
+
             var response;
             var xhr = new XMLHttpRequest();
             xhr.open("GET", `http://localhost:8000/game_recordings/${file || default_file}.json.gz`, true);
@@ -59,17 +59,32 @@
 
             var index = 0
             var updateChart = () => {
-                var players = response.players.reduce((acc, player) => {return {...acc, [player.id]: player}}, {})
+                var players = response.players.reduce((acc, player) => { return { ...acc, [player.id]: player } }, {})
                 if (index > response.galaxies.length - 2) {
                     isPlaying = false
                     set_play_pause_button()
                 }
                 fleet_data = response.galaxies[index].fleets.map(fleet => (
-                    { ...fleet.p, color: fleet?.o ? players[fleet.o].c : "grey", markerSize: 4 + Math.sqrt(fleet.t) * 1.5, markerType: "triangle", toolTipContent: `${fleet.t}`, markerBorderColor: fleet?.o && players[fleet.o].t ? players[fleet.o].t.c : "black", markerBorderThickness: 1 }
+                    {
+                        ...fleet.p,
+                        color: fleet?.o ? players[fleet.o].c : "grey",
+                        markerSize: 4 + Math.sqrt(fleet.t) * 1.5,
+                        markerType: "triangle",
+                        toolTipContent: `${fleet.t}`,
+                        markerBorderColor: fleet?.o && players[fleet.o].t ? players[fleet.o].t.c : "black",
+                        markerBorderThickness: 1
+                    }
                 ))
 
                 planet_data = response.galaxies[index].planets.map(planet => (
-                    { ...planet.p, color: planet.o ? players[planet.o].c : "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}`, markerBorderColor: planet?.o && players[planet.o].t ? players[planet.o].t.c : "black", markerBorderThickness: 3 }
+                    {
+                        ...planet.p,
+                        color: planet.o ? players[planet.o].c : "grey",
+                        markerSize: planet.r * 100,
+                        toolTipContent: `Planet: ${planet.t}`,
+                        markerBorderColor: planet?.o && players[planet.o].t ? players[planet.o].t.c : "black",
+                        markerBorderThickness: 3
+                    }
                 ))
 
                 data_points = [...planet_data, ...fleet_data]
@@ -116,10 +131,10 @@
 
 <body>
     <div id="chartContainer"
-    style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
-</div>
-<div id="pieContainer">
-</div>
+        style="margin-left: auto; margin-right: auto; height: 100vh; width: 100vh; background-image: url('https://as1.ftcdn.net/v2/jpg/00/92/21/66/1000_F_92216615_bLySNjZrHZGBvf01vwTEBr5kYn9b2T3T.jpg');">
+    </div>
+    <div id="pieContainer">
+    </div>
 
     <!-- https://developer.mozilla.org/en-US/docs/Web/Media/Audio_and_video_delivery/Video_player_styling_basics -->
     <div id="video-controls" class="controls" data-state="hidden">
