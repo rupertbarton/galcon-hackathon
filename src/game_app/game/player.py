@@ -26,5 +26,4 @@ class Player:
         return {
             "n": self.name,
             "c": self.colour,
-            "id": self.id
-        }
+            "id": self.id} | ({"t": self.team.to_json()} if self.team else {})

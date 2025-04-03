@@ -34,6 +34,7 @@
             var data_points = []
 
             var chart = new CanvasJS.Chart("chartContainer", {
+                zoomEnabled: true,
                 title: {
                     fontColor: "white"
                 },
@@ -59,16 +60,16 @@
             var index = 0
             var updateChart = () => {
                 var players = response.players.reduce((acc, player) => {return {...acc, [player.id]: player}}, {})
-                if (index > response.length - 2) {
+                if (index > response.galaxies.length - 2) {
                     isPlaying = false
                     set_play_pause_button()
                 }
                 fleet_data = response.galaxies[index].fleets.map(fleet => (
-                    { ...fleet.p, color: fleet?.o ? players[fleet.o].c : "grey", markerSize: 4 + fleet.t / 7, markerType: "triangle", toolTipContent: `${fleet.t}` }
+                    { ...fleet.p, color: fleet?.o ? players[fleet.o].c : "grey", markerSize: 4 + Math.sqrt(fleet.t) * 1.5, markerType: "triangle", toolTipContent: `${fleet.t}`, markerBorderColor: fleet?.o && players[fleet.o].t ? players[fleet.o].t.c : "black", markerBorderThickness: 1 }
                 ))
 
                 planet_data = response.galaxies[index].planets.map(planet => (
-                    { ...planet.p, color: planet.o ? players[planet.o].c : "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}` }
+                    { ...planet.p, color: planet.o ? players[planet.o].c : "grey", markerSize: planet.r * 100, toolTipContent: `Planet: ${planet.t}`, markerBorderColor: planet?.o && players[planet.o].t ? players[planet.o].t.c : "black", markerBorderThickness: 3 }
                 ))
 
                 data_points = [...planet_data, ...fleet_data]

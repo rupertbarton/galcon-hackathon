@@ -32,7 +32,7 @@ The winner of the game should be printed out to the console, and a file called `
 
 In `src/game_app/game_draw/run_server.py` lies the code that starts up a local server that enables recordings to be viewed in a browser.
 
-Run `run_server.py` with:
+While the virtual environment is active, run `run_server.py` with:
 
 ```bash
 python src/game_app/game_draw/run_server.py

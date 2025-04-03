@@ -145,9 +145,8 @@ class Game:
         if len(remaining_player_ids) <= 1:
             self.finished = True
 
-        remaining_players = filter(
-            lambda player: player.id in remaining_player_ids, self.players
-        )
+        remaining_players = [player for player in self.players if player.id in remaining_player_ids]
+
         if (
             all([player.team for player in remaining_players])
             and len(set([player.team.id for player in remaining_players])) <= 1

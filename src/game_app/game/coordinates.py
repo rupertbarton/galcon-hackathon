@@ -8,4 +8,4 @@ class Coordinates:
         self.y = y
 
     def to_json(self):
-        return {"x": round(self.x, 3), "y": round(self.y, 3)}
+        return {"x": round(self.x, 2), "y": round(self.y, 2)}
